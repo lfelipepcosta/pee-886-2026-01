@@ -8,23 +8,23 @@ Welcome to the official repository of the **PEE886 - Quantum Machine Learning** 
 
 ## 🏗️ Repository Organization
 
-The project follows a modular structure where each student has their own "workspace" identified by a unique letter (e.g., `a`, `b`, `c`).
+The project follows a modular structure where each student has their own "workspace" identified by a unique name (e.g., `brenno_rodrigues`, `clara_pacheco`, etc.).
 
 ### 📂 Folder Structure
 
 ```text
 .
 ├── 📁 notebooks/          # 📓 Jupyter Notebooks with demonstrations and lessons
-│   ├── 📁 a/              # 👤 Student A Notebooks
-│   ├── 📁 b/              # 👤 Student B Notebooks
+│   ├── 📁 brenno_rodrigues/              # 👤 Student A Notebooks
+│   ├── 📁 clara_pacheco/              # 👤 Student B Notebooks
 │   └── ...
 ├── 📁 data/               # 💾 Raw data, configurations, and exports
-│   ├── 📁 a/              # 👤 Student A data and configs
-│   ├── 📁 b/              # 👤 Student B data and configs
+│   ├── 📁 brenno_rodrigues/              # 👤 Student A data and configs
+│   ├── 📁 clara_pacheco/              # 👤 Student B data and configs
 │   └── ...
 ├── 📁 qml/                # 🧠 Main module for Quantum Machine Learning
-│   ├── 📁 a/              # 👤 Student A Implementation
-│   ├── 📁 b/              # 👤 Student B Implementation
+│   ├── 📁 brenno_rodrigues/              # 👤 Student A Implementation
+│   ├── 📁 clara_pacheco/              # 👤 Student B Implementation
 │   │   ├── 📁 loaders/    # 📥 Data loading and processing
 │   │   ├── 📁 models/     # 🤖 Quantum model architectures
 │   │   ├── 📁 trainer/    # ⚡ Training and optimization loops
@@ -32,8 +32,8 @@ The project follows a modular structure where each student has their own "worksp
 │   │   └── 📁 visualization/ # 📈 Charts and circuit visualization
 │   └── ...             # 👤 Other students (c, d, e...)
 ├── 📁 scripts/            # 🛠️ Utility and automation scripts
-│   ├── 📁 a/              # 👤 Student A Scripts
-│   ├── 📁 b/              # 👤 Student B Scripts
+│   ├── 📁 brenno_rodrigues/              # 👤 Student A Scripts
+│   ├── 📁 clara_pacheco/              # 👤 Student B Scripts
 │   └── ...
 ├── 📄 Makefile            # ⚙️ Shortcut commands (build, jupyter, etc.)
 ├── 📄 requirements.txt    # 📦 Global project dependencies
@@ -46,11 +46,45 @@ The project follows a modular structure where each student has their own "worksp
 
 Each student has a dedicated space for their implementation. Click on the corresponding letter to access each one's specific documentation:
 
-- [👤 Student A](./qml/a/README.md)
-- [👤 Student B](./qml/b/README.md)
-<!-- Add new links here as new students are included -->
+- [👤 Brenno Rodrigues](./qml/brenno_rodrigues/README.md)
+- [👤 Clara Pacheco](./qml/clara_pacheco/README.md)
+- [👤 Eduardo Banaczewski](./qml/eduardo_banaczewski/README.md)
+- [👤 Ellizeu Sena](./qml/ellizeu_sena/README.md)
+- [👤 Eraldo Junior](./qml/eraldo_junior/README.md)
+- [👤 Felipe Grael](./qml/felipe_grael/README.md)
+- [👤 Felipe Taparo](./qml/felipe_taparo/README.md)
+- [👤 Fernanda Verde](./qml/fernanda_verde/README.md)
+- [👤 Gabriel Lisboa](./qml/gabriel_lisboa/README.md)
+- [👤 Guilherme Thomaz](./qml/guilherme_thomaz/README.md)
+- [👤 Leandro Fernandes](./qml/leandro_fernandes/README.md)
+- [👤 Lucas Nunes](./qml/lucas_nunes/README.md)
+- [👤 Luiz Costa](./qml/luiz_costa/README.md)
+- [👤 Miguel Saavedra](./qml/miguel_saavedra/README.md)
+- [👤 Pedro Achcar](./qml/pedro_achcar/README.md)
+- [👤 Pedro Campos](./qml/pedro_campos/README.md)
+- [👤 Samarone Junior](./qml/samarone_junior/README.md)
 
 ---
+
+## Groups:
+
+### Aprendizado de Máquina Quântico Híbrido
+
+- [👤 Group 01](./qml/group_works/group_01/README.md)
+- [👤 Group 02](./qml/group_works/group_02/README.md)
+- [👤 Group 03](./qml/group_works/group_03/README.md)
+- [👤 Group 04](./qml/group_works/group_04/README.md)
+- [👤 Group 05](./qml/group_works/group_05/README.md)
+- [👤 Group 06](./qml/group_works/group_06/README.md)
+
+Where each group has the following topics:
+
+- Group 1: Aprendizado de Máquina Quântico Híbrido
+- Group 2: Redes Neurais Convolucionais Quânticas (QCNN)
+- Group 3: Redes Neurais Quânticas Variacionais (VQAs)
+- Group 4: Redes Adversárias Generativas Quânticas (QGANs)
+- Group 5: Máquinas de Vetores de Suporte Quânticas (QSVM)
+- Group 6: Técnicas de Encoding Quântico e Carregamento de Dados
 
 ## 📜 Contribution Rules
 
@@ -58,12 +92,12 @@ To maintain code harmony and readability, all students must follow these guideli
 
 ### 👤 Reserved Areas and Documentation
 Each student has an identifying letter (e.g., `a`, `b`, `c`). You must work **exclusively** within the folders corresponding to your letter in:
-- 📁 `qml/<letter>/`
-- 📁 `notebooks/<letter>/`
-- 📁 `scripts/<letter>/`
-- 📁 `data/<letter>/`
+- 📁 `qml/<student>/`
+- 📁 `notebooks/<student>/`
+- 📁 `scripts/<student>/`
+- 📁 `data/<student>/`
 
-📌 **Important**: Each student module (`qml/<letter>/`) contains its own **README.md**. It is mandatory for students to fill out this file explaining:
+📌 **Important**: Each student module (`qml/<student>/`) contains its own **README.md**. It is mandatory for students to fill out this file explaining:
 - Architecture and technologies used.
 - Usage instructions for your implementation.
 - Bibliographic references.
@@ -142,12 +176,12 @@ If Student **B**'s code is broken:
 ```python
 # In qml/__init__.py
 
-from . import a
-__all__.extend( a.__all__ )
-from .a import *
+from . import brenno_rodrigues
+__all__.extend( brenno_rodrigues.__all__ )
+from .brenno_rodrigues import *
 
 # Comment these if B is broken:
-# from . import b
+# from . import clara_pacheco
 # __all__.extend( b.__all__ )
 # from .b import *
 ```
