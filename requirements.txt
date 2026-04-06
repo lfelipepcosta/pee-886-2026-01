@@ -20,3 +20,7 @@ qiskit
 qiskit-aer
 pennylane
 tensorflow
+quimb
+pylatexenc
+pennylane-qiskit
+kahypar
