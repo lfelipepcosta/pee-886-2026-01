@@ -7,22 +7,20 @@ import sys
 repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
 sys.path.append(repo_root)
 
-from qml.luiz_costa.trainer.mlp_trainer import PyTorchMLPWrapper
-from qml.luiz_costa.models.mlp_classic import ClassicMLPNet
 from qml.luiz_costa.loaders.data_loader import DataLoader5G
 from qml.luiz_costa.loaders.grid_loader import InferenceGridLoader
 from qml.luiz_costa.visualization.plotting import plot_coverage_map
 
-# Localização do pipeline treinado e diretório de saída para resultados geoespaciais
-MODEL_PATH = os.path.join(repo_root, "data", "luiz_costa", "trained_models", "best_pipeline_mlp.joblib")
+# Localização do pipeline treinado do XGBoost e diretório de saída
+MODEL_PATH = os.path.join(repo_root, "data", "luiz_costa", "trained_models", "best_pipeline_xgb.joblib")
 OUTPUT_DIR = os.path.join(repo_root, "data", "luiz_costa", "inference_results")
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 def main():
     '''
-    Gera as predições de cobertura para todos os pontos da malha utilizando o modelo MLP clássico.
+    Gera as predições de cobertura para todos os pontos da malha utilizando o modelo XGBoost.
     '''
-    print("Iniciando inferência para mapeamento de cobertura (MLP Clássico)")
+    print("Iniciando inferência para mapeamento de cobertura (XGBoost)")
 
     # Carrega a grade topológica de 30 metros pré-calculada
     base_loader = DataLoader5G()
@@ -36,7 +34,12 @@ def main():
         'Antena_AnguloElevacao', 'Freq_Medida_DT_MHz', 'Clutter_Class'
     ]
 
-    # Carrega o modelo MLP do disco e executa as predições
+    # Verifica se o modelo existe antes de carregar
+    if not os.path.exists(MODEL_PATH):
+        print(f"Erro: Modelo não encontrado em {MODEL_PATH}. Execute o treinamento primeiro.")
+        return
+
+    # Carrega o modelo XGBoost do disco e executa as predições
     pipeline = joblib.load(MODEL_PATH)
     df_grid['RSRP_dBm'] = pipeline.predict(df_grid[features]).astype('float32')
     
@@ -45,12 +48,12 @@ def main():
     df_antennas = df_grid[['Antena_Lat', 'Antena_Lon']].drop_duplicates() if 'Antena_Lat' in df_grid.columns else pd.DataFrame()
     
     # Salva o mapa de predições definitivo em PDF vetorizado
-    plot_coverage_map(df_grid, df_route, df_antennas, model_name="Classic_MLP", target_name="SS-RSRP", output_dir=OUTPUT_DIR)
+    plot_coverage_map(df_grid, df_route, df_antennas, model_name="XGBoost", target_name="SS-RSRP", output_dir=OUTPUT_DIR)
 
-    # Persiste os resultados totais em arquivo Parquet compacto e rápido
-    output_parquet = os.path.join(OUTPUT_DIR, "ai_coverage_30m_mlp.parquet")
+    # Persiste os resultados totais em arquivo Parquet
+    output_parquet = os.path.join(OUTPUT_DIR, "ai_coverage_30m_xgb.parquet")
     df_grid[['Latitude', 'Longitude', 'RSRP_dBm']].to_parquet(output_parquet, index=False)
-    print("Mapeamento geoespacial clássico MLP concluído")
+    print("Mapeamento geoespacial XGBoost concluído")
 
 if __name__ == "__main__":
     main()
