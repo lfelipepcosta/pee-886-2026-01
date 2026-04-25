@@ -75,8 +75,13 @@ class InferenceGridLoader:
         ]
         
         # Finaliza o DataFrame, remove valores nulos e salva CSV no cache
-        final_df = grid_df[['Latitude', 'Longitude'] + features_required].copy()
-        final_df['Clutter_Class'] = final_df['Clutter_Class'].fillna(0).astype(int).astype(str)
+        cols_to_keep = ['Latitude', 'Longitude'] + features_required
+        for extra_col in ['Antena_Lat', 'Antena_Lon']:
+            if extra_col in grid_df.columns:
+                cols_to_keep.append(extra_col)
+        
+        final_df = grid_df[cols_to_keep].copy()
+        final_df['Clutter_Class'] = final_df['Clutter_Class'].fillna(0.0).astype(float)
         final_df = final_df.dropna()
         
         print(f"Salvando o arquivo da grade consolidada em {self.grid_path}")

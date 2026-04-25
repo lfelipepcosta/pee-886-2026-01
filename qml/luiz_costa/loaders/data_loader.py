@@ -151,6 +151,9 @@ class DataLoader5G:
         df_dt['Antena_AnguloMeiaPotencia'] = pd.to_numeric(found_antennas['AnguloMeiaPotenciaAntena'].values, errors='coerce')
         df_dt['Antena_FrenteCosta'] = pd.to_numeric(found_antennas['FrenteCostaAntena'].values, errors='coerce')
         df_dt['Antena_AnguloElevacao'] = pd.to_numeric(found_antennas['AnguloElevacao'].values, errors='coerce')
+        df_dt['Antena_FreqTx'] = found_antennas['FreqTxMHz'].values
+        df_dt['Antena_Lat'] = found_antennas['Latitude'].values
+        df_dt['Antena_Lon'] = found_antennas['Longitude'].values
 
         # Calcula o Delta Azimute final entre a antena selecionada e o ponto
         cand_az = np.nan_to_num(pd.to_numeric(found_antennas['Azimute'].values, errors='coerce'), nan=0.0)

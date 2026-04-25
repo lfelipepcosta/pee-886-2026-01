@@ -1,5 +1,6 @@
 import numpy as np
 import xgboost as xgb
+from sklearn.model_selection import train_test_split
 from sklearn.base import BaseEstimator, RegressorMixin
 
 class XGBoostWrapper(BaseEstimator, RegressorMixin):
@@ -51,8 +52,21 @@ class XGBoostWrapper(BaseEstimator, RegressorMixin):
         if self.verbose:
             print("Treinando baseline clássico acelerado XGBoost")
             
-        # Realiza o ajuste dos pesos do modelo
-        self.model.fit(X_arr, y_arr)
+        # Realiza o ajuste dos pesos do modelo com conjunto de avaliação para curva de aprendizado
+        X_t, X_v, y_t, y_v = train_test_split(X_arr, y_arr, test_size=0.15, random_state=self.random_state)
+        
+        self.model.fit(
+            X_t, y_t,
+            eval_set=[(X_t, y_t), (X_v, y_v)],
+            verbose=False
+        )
+        
+        # Armazena o histórico de métricas
+        results = self.model.evals_result()
+        self.history_ = {
+            'train_loss': results['validation_0']['rmse'],
+            'val_loss': results['validation_1']['rmse']
+        }
         return self
 
     def predict(self, X):

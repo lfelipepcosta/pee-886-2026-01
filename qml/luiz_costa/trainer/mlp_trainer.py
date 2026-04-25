@@ -30,6 +30,7 @@ class PyTorchMLPWrapper(BaseEstimator, RegressorMixin):
         self.verbose = verbose
         
         self.model = None
+        self.history_ = {'train_loss': [], 'val_loss': []}
         # Utiliza GPU (CUDA) se disponível, caso contrário usa a CPU
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         
@@ -74,6 +75,7 @@ class PyTorchMLPWrapper(BaseEstimator, RegressorMixin):
         # Loop principal de treinamento
         for epoch in range(self.epochs):
             self.model.train() # Habilita o modo de treinamento da rede
+            train_loss = 0.0
             for batch_X, batch_y in train_loader:
                 batch_X, batch_y = batch_X.to(self.device), batch_y.to(self.device)
                 optimizer.zero_grad()
@@ -81,6 +83,11 @@ class PyTorchMLPWrapper(BaseEstimator, RegressorMixin):
                 loss = criterion(outputs, batch_y)
                 loss.backward()
                 optimizer.step()
+                
+                train_loss += loss.item() * batch_X.size(0)
+            
+            train_loss /= len(train_loader.dataset)
+            self.history_['train_loss'].append(train_loss)
             
             # Desabilita o treino para avaliar a métrica de erro no conjunto de validação
             self.model.eval()
@@ -93,6 +100,7 @@ class PyTorchMLPWrapper(BaseEstimator, RegressorMixin):
                     val_loss += loss.item() * batch_X.size(0)
             
             val_loss /= len(val_loader.dataset)
+            self.history_['val_loss'].append(val_loss)
             scheduler.step(val_loss)
             
             # Salva o estado atual se for o melhor resultado de validação até agora

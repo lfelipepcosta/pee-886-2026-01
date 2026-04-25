@@ -119,3 +119,25 @@ def plot_coverage_map(df_coverage, df_route, df_antennas, model_name, target_nam
     output_path = os.path.join(output_dir, f"coverage_map_{target_name}_{model_name}.pdf")
     plt.savefig(output_path, format='pdf', bbox_inches='tight')
     plt.close(fig)
+
+def plot_learning_curve(history, model_name, target_name, output_dir):
+    '''
+    Gera um gráfico da curva de aprendizado (Perda vs Épocas) para monitorar convergência.
+    '''
+    print(f"Gerando curva de aprendizado para {model_name}")
+    plt.figure(figsize=(10, 6))
+    
+    epochs = range(1, len(history['train_loss']) + 1)
+    plt.plot(epochs, history['train_loss'], 'b-', label='Treino', linewidth=2)
+    plt.plot(epochs, history['val_loss'], 'r-', label='Validação', linewidth=2)
+    
+    plt.title(f'Curva de Aprendizado - {model_name} ({target_name})', fontsize=14)
+    plt.xlabel('Épocas / Estimadores', fontsize=12)
+    plt.ylabel('Erro (RMSE/MSE)', fontsize=12)
+    plt.grid(True, linestyle='--', alpha=0.5)
+    plt.legend()
+    plt.tight_layout()
+    
+    output_path = os.path.join(output_dir, f"learning_curve_{target_name}_{model_name}.pdf")
+    plt.savefig(output_path, format='pdf', bbox_inches='tight')
+    plt.close()

@@ -8,29 +8,24 @@ repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
 log_dir = os.path.join(repo_root, "data", "luiz_costa", "execution_reports")
 os.makedirs(log_dir, exist_ok=True)
 
-# Lista de scripts para execução dos baselines clássicos (XGBoost e MLP)
+# Lista de scripts para execução do Pipeline Híbrido Quântico
 scripts = [
-    "run_optimization_xgb.py",    # 1. Otimização de hiperparâmetros do XGBoost
-    "run_main_xgb.py",            # 2. Treinamento final e métricas do XGBoost
-    "run_inference_xgb.py",       # 3. Geração do mapa de cobertura do XGBoost
-    
-    "run_optimization_mlp.py",    # 4. Otimização de hiperparâmetros do MLP Clássico
-    "run_main_mlp.py",            # 5. Treinamento final e métricas do MLP Clássico
-    "run_inference_mlp.py",       # 6. Geração do mapa de cobertura do MLP Clássico
-    
-    "run_spatial_validation.py"   # 7. Validação espacial cruzada para os modelos executados
+    "run_optimization.py",        # 1. Otimização de hiperparâmetros (Optuna)
+    "run_main.py",                # 2. Treinamento final e métricas do Híbrido
+    "run_inference_hybrid.py",    # 3. Geração do mapa de cobertura Híbrido
+    "run_spatial_validation.py"   # 4. Validação espacial contra Drive Test e Baselines
 ]
 
 # Configura o caminho completo do arquivo de log no diretório data
 timestamp = time.strftime("%Y%m%d_%H%M")
-log_file = os.path.join(log_dir, f"execution_report_baselines_{timestamp}.txt")
+log_file = os.path.join(log_dir, f"execution_report_hybrid_{timestamp}.txt")
 
-print(f"Iniciando Orquestrador de Execução (Apenas Baselines Clássicos)")
+print(f"Iniciando Orquestrador de Execução (Pipeline Híbrido Quântico)")
 print(f"O relatório detalhado será salvo em: {log_file}\n")
 
 with open(log_file, "w", encoding="utf-8") as f_log:
     total_start = time.time()
-    f_log.write(f"Relatório de Execução - Baselines Clássicos\n")
+    f_log.write(f"Relatório de Execução - Pipeline Híbrido Quântico\n")
     f_log.write(f"Início: {time.ctime(total_start)}\n")
     f_log.write(f"{'='*60}\n")
     

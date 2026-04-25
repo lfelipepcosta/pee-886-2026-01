@@ -1,0 +1,8 @@
+Relatório de Execução - Baselines Clássicos
+Início: Thu Apr 23 20:20:56 2026
+============================================================
+run_optimization_xgb.py: SUCESSO (1181.32s)
+run_main_xgb.py: SUCESSO (179.24s)
+run_inference_xgb.py: SUCESSO (203.51s)
+run_optimization_mlp.py: SUCESSO (10202.78s)
+run_main_mlp.py: INTERROMPIDO

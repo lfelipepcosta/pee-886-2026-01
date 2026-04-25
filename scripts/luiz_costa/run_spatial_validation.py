@@ -81,17 +81,20 @@ def validate_ai_coverage(parquet_path, dt_path, output_dir, model_name):
     raw_errors = raw_predicted - raw_actual
     raw_rmse, raw_mse = np.sqrt(mean_squared_error(raw_actual, raw_predicted)), mean_squared_error(raw_actual, raw_predicted)
     raw_bias = np.mean(raw_errors)
+    raw_std = np.std(raw_errors)
     
     # Calcula métricas estritas após filtragem de distância
     strict_actual, strict_predicted = strict_gdf[actual_col].values, strict_gdf[sim_col].values
     strict_errors = strict_predicted - strict_actual
     strict_rmse, strict_mse = np.sqrt(mean_squared_error(strict_actual, strict_predicted)), mean_squared_error(strict_actual, strict_predicted)
     strict_bias = np.mean(strict_errors)
+    strict_std = np.std(strict_errors)
     
     # Calcula métricas calibradas compensando o viés (Bias) médio
     calib_predicted = strict_predicted - strict_bias
     calib_errors = calib_predicted - strict_actual
     calib_rmse, calib_mse = np.sqrt(mean_squared_error(strict_actual, calib_predicted)), mean_squared_error(strict_actual, calib_predicted)
+    calib_std = np.std(calib_errors)
 
     # Monta o relatório de métricas detalhado
     report = (
@@ -99,14 +102,15 @@ def validate_ai_coverage(parquet_path, dt_path, output_dir, model_name):
         f"Dados Totais ({len(validation_gdf)} pontos alinhados)\n"
         f"RMSE : {raw_rmse:.2f} dB\n"
         f"MSE  : {raw_mse:.2f} dB\n"
-        f"Viés : {raw_bias:.2f} dB\n\n"
+        f"Erro Médio (Viés ± Desvio Padrão): {raw_bias:.2f} ± {raw_std:.2f} dB\n\n"
         f"Dados Filtrados (Distância <= {MAX_DISTANCE_M}m, {len(strict_gdf)} pontos)\n"
         f"RMSE : {strict_rmse:.2f} dB\n"
         f"MSE  : {strict_mse:.2f} dB\n"
-        f"Viés : {strict_bias:.2f} dB\n\n"
+        f"Erro Médio (Viés ± Desvio Padrão): {strict_bias:.2f} ± {strict_std:.2f} dB\n\n"
         f"Dados Calibrados (Compensação de {strict_bias:.2f} dB)\n"
         f"RMSE Calibrado : {calib_rmse:.2f} dB\n"
         f"MSE Calibrado  : {calib_mse:.2f} dB\n"
+        f"Erro Médio Calib. (Viés ± Desvio Padrão): 0.00 ± {calib_std:.2f} dB\n"
     )
 
     # Exporta resultados para arquivo texto
@@ -146,6 +150,15 @@ def validate_ai_coverage(parquet_path, dt_path, output_dir, model_name):
         sorted_err = np.sort(abs_err)
         cdf = np.arange(1, len(sorted_err) + 1) / len(sorted_err)
         plt.plot(sorted_err, cdf, label=label, color=color, linewidth=2)
+        
+        # Identifica o valor do erro no percentil 90
+        p90_idx = np.where(cdf >= 0.90)[0][0]
+        p90_val = sorted_err[p90_idx]
+        
+        # Adiciona linha vertical e anotação no eixo X para o P90
+        plt.axvline(x=p90_val, color=color, linestyle='--', alpha=0.5)
+        plt.text(p90_val, 0.05, f"P90: {p90_val:.1f}dB", color=color, rotation=90, verticalalignment='bottom', fontweight='bold')
+
     plt.axhline(y=0.90, color='red', linestyle='dotted', alpha=0.7, label='Percentil 90')
     plt.title(f"CDF do Erro Absoluto - {model_name}", fontsize=14, fontweight='bold')
     plt.xlabel("Erro Absoluto |dB|", fontsize=12)

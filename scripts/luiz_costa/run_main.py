@@ -2,8 +2,10 @@ import os
 import sys
 import json
 import joblib
+import numpy as np
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 
 # Adiciona a raiz do repositório ao path para permitir imports dos módulos QML
 repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
@@ -13,7 +15,7 @@ from qml.luiz_costa.loaders.data_loader import DataLoader5G
 from qml.luiz_costa.loaders.data_preprocessor import create_preprocessor, NUMERIC_FEATURES, CATEGORICAL_FEATURE
 from qml.luiz_costa.trainer.hybrid_trainer import PyTorchHybridWrapper
 from qml.luiz_costa.evaluation.cross_validation import run_kfold_validation
-from qml.luiz_costa.visualization.plotting import plot_feature_importance, plot_actual_vs_predicted, plot_error_distribution
+from qml.luiz_costa.visualization.plotting import plot_feature_importance, plot_actual_vs_predicted, plot_error_distribution, plot_learning_curve
 
 # Define caminhos para arquivos de configuração e diretórios de resultados
 CONFIG_FILE = os.path.join(repo_root, "data", "luiz_costa", "config", "best_params_hybrid.json")
@@ -68,8 +70,28 @@ def main():
     pipeline.fit(X_train, y_train)
     y_pred = pipeline.predict(X_test)
 
+    # Calcula as métricas de desempenho final no conjunto de teste
+    rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+    mae = mean_absolute_error(y_test, y_pred)
+    r2 = r2_score(y_test, y_pred)
+    
+    metrics_report = (
+        f"Relatório de Métricas Finais (Amostra de Teste) - Híbrido Quântico\n"
+        f"{'='*60}\n"
+        f"RMSE : {rmse:.4f} dB\n"
+        f"MAE  : {mae:.4f} dB\n"
+        f"R2   : {r2:.4f}\n"
+        f"{'='*60}\n"
+    )
+    
+    metrics_path = os.path.join(RESULTS_DIR, "hybrid_final_metrics.txt")
+    with open(metrics_path, "w") as f:
+        f.write(metrics_report)
+    print(f"Métricas finais salvas em {metrics_path}")
+
     # Gera e salva os gráficos analíticos em formato PDF
     target_label = f"{target}_Hybrid"
+    plot_learning_curve(pipeline.named_steps['model'].history_, "Hybrid", target_label, output_dir=RESULTS_DIR)
     plot_feature_importance(pipeline, X_test, y_test, target_label, output_dir=RESULTS_DIR)
     plot_actual_vs_predicted(y_test, y_pred, target_label, output_dir=RESULTS_DIR)
     plot_error_distribution(y_test, y_pred, target_label, output_dir=RESULTS_DIR)

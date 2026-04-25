@@ -29,13 +29,13 @@ def run_kfold_validation(pipeline, X, y, n_splits=5, output_dir="./"):
     r2_mean, r2_std = np.mean(r2_scores), np.std(r2_scores)
     
     # Exibe os resultados no console
-    print(f"RMSE: {rmse_mean:.2f} dB ± {rmse_std:.2f}")
-    print(f"MAE:  {mae_mean:.2f} dB ± {mae_std:.2f}")
+    print(f"RMSE: {rmse_mean:.2f} dB ± {rmse_std:.4f}")
+    print(f"MAE:  {mae_mean:.2f} dB ± {mae_std:.4f}")
     print(f"R2:   {r2_mean:.4f} ± {r2_std:.4f}")
     
     # Salva as métricas calculadas em um arquivo txt
     os.makedirs(output_dir, exist_ok=True)
     with open(os.path.join(output_dir, "kfold_metrics.txt"), "w") as f:
-        f.write(f"RMSE Médio: {rmse_mean:.2f} dB (Desvio padrão: {rmse_std:.2f})\n")
-        f.write(f"MAE Médio:  {mae_mean:.2f} dB (Desvio padrão: {mae_std:.2f})\n")
+        f.write(f"RMSE Médio: {rmse_mean:.2f} dB (Desvio padrão: {rmse_std:.4f})\n")
+        f.write(f"MAE Médio:  {mae_mean:.2f} dB (Desvio padrão: {mae_std:.4f})\n")
         f.write(f"R2 Médio:   {r2_mean:.4f} (Desvio padrão: {r2_std:.4f})\n")

@@ -28,6 +28,7 @@ class PyTorchHybridWrapper(BaseEstimator, RegressorMixin):
         self.verbose = verbose
         
         self.model = None
+        self.history_ = {'train_loss': [], 'val_loss': []}
         # Define o dispositivo como CPU para evitar incompatibilidades com o simulador quântico
         self.device = torch.device('cpu') 
         
@@ -83,6 +84,18 @@ class PyTorchHybridWrapper(BaseEstimator, RegressorMixin):
                 loss.backward() # Calcula os gradientes usando backpropagation
                 optimizer.step() # Atualiza os pesos
             
+            # Registra a perda média de treinamento da época
+            train_loss = 0.0
+            self.model.eval()
+            with torch.no_grad():
+                for batch_X, batch_y in train_loader:
+                    batch_X, batch_y = batch_X.to(self.device), batch_y.to(self.device)
+                    outputs = self.model(batch_X)
+                    loss = criterion(outputs, batch_y)
+                    train_loss += loss.item() * batch_X.size(0)
+            train_loss /= len(train_loader.dataset)
+            self.history_['train_loss'].append(train_loss)
+            
             # Avalia o modelo no conjunto de validação interna
             self.model.eval()
             val_loss = 0.0
@@ -94,6 +107,7 @@ class PyTorchHybridWrapper(BaseEstimator, RegressorMixin):
                     val_loss += loss.item() * batch_X.size(0)
             
             val_loss /= len(val_loader.dataset)
+            self.history_['val_loss'].append(val_loss)
             scheduler.step(val_loss) # Reduz a taxa de aprendizagem se a perda estagnar
             
             # Verifica se houve melhora na perda para salvar o melhor estado
