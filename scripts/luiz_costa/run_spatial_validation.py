@@ -50,11 +50,28 @@ def validate_ai_coverage(parquet_path, dt_path, output_dir, model_name):
     sim_df = pd.read_parquet(parquet_path)
     sim_geometry = [Point(xy) for xy in zip(sim_df['Longitude'], sim_df['Latitude'])]
     sim_gdf = gpd.GeoDataFrame(sim_df, geometry=sim_geometry, crs="EPSG:4674").to_crs(epsg=31983)
+    
+    # Mantém apenas a predição e a geometria para evitar conflito de nomes de colunas no SJOIN
+    sim_gdf = sim_gdf[['RSRP_dBm', 'geometry']]
 
     print("Realizando cruzamento espacial por proximidade (SJOIN)")
     # Une os pontos do Drive Test aos pontos da grade virtual mais próximos
     validation_gdf = gpd.sjoin_nearest(dt_gdf, sim_gdf, how='inner', distance_col='match_distance_m', max_distance=MAX_DISTANCE_M)
-    validation_gdf = validation_gdf.drop_duplicates(subset=['geometry'])
+    
+    # Agrupa por coordenadas e calcula a média do sinal real e predito para pontos repetidos
+    print("Agrupando medições repetidas por coordenada (Média de sinal)")
+    
+    # Usamos as colunas originais do dt_gdf para o agrupamento
+    group_cols = ['Latitude', 'Longitude']
+    validation_gdf = validation_gdf.groupby(group_cols, as_index=False).agg({
+        'DT_RSRP': 'mean',
+        'RSRP_dBm': 'mean',
+        'match_distance_m': 'mean'
+    })
+    
+    # Reconverte para GeoDataFrame após o agrupamento para manter as propriedades espaciais
+    val_geometry = [Point(xy) for xy in zip(validation_gdf['Longitude'], validation_gdf['Latitude'])]
+    validation_gdf = gpd.GeoDataFrame(validation_gdf, geometry=val_geometry, crs="EPSG:4674").to_crs(epsg=31983)
 
     total_matches = len(validation_gdf)
     print(f"Pontos comparados com sucesso: {total_matches}")
@@ -181,7 +198,7 @@ def validate_ai_coverage(parquet_path, dt_path, output_dir, model_name):
     ax2 = fig3d.add_subplot(132)
     ax2.scatter(strict_gdf['Elevation'], calib_errors, alpha=0.3, color='purple', s=10)
     ax2.axhline(0, color='red', linestyle='--', linewidth=2)
-    ax2.set_xlabel('Altimetria (m)'); ax2.set_ylabel('Erro (dB)')
+    ax2.set_xlabel('Elevação (m)'); ax2.set_ylabel('Erro (dB)')
     ax2.set_title('Erro por Altitude', fontweight='bold'); ax2.grid(True, linestyle='--', alpha=0.5)
 
     ax3 = fig3d.add_subplot(133)

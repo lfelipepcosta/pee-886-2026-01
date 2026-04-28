@@ -1,0 +1,13 @@
+Relatório de Execução - Pipeline Híbrido Quântico
+Início: Tue Apr 28 00:29:41 2026
+============================================================
+run_optimization_mlp.py: SUCESSO (1005.12s)
+run_main_mlp.py: SUCESSO (686.45s)
+run_inference_mlp.py: SUCESSO (186.40s)
+run_optimization.py: SUCESSO (434.98s)
+run_main.py: SUCESSO (1323.01s)
+run_inference_hybrid.py: SUCESSO (166.62s)
+run_spatial_validation.py: SUCESSO (555.21s)
+============================================================
+Fim: Tue Apr 28 01:42:19 2026
+Tempo Total: 72.63 min

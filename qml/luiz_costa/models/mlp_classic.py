@@ -30,5 +30,19 @@ class ClassicMLPNet(nn.Module):
     def forward(self, x):
         '''
         Define a propagação dos dados pela rede MLP clássica.
+        Implementa uma trava física projetada para evitar "Extrapolação Catastrófica"
+        (Catastrophic Extrapolation) em dados Out-of-Distribution (OOD).
         '''
-        return self.net(x).squeeze(-1)
+        out = self.net(x).squeeze(-1)
+        
+        # Justificativa Tanh:
+        # O clamp rígido zera o gradiente (Dead Gradient) para valores iniciais fora do limite, impedindo o aprendizado pelo otimizador
+        # O Tanh mapeia qualquer valor irreal de rede ([-inf, +inf]) suavemente para [-1, 1], mantendo a derivada contínua para o Backpropagation
+        # A rede é multiplicada e deslocada para que sua saída limite coincida exatamente com as restrições teóricas de hardware e física:
+        #   - Limite Inferior (-174 dBm): Piso termodinâmico de Ruído Térmico de Johnson-Nyquist
+        #   - Limite Superior (-30 dBm): Ponto de saturação do LNA (Low Noise Amplifier) do receptor
+        #   O limite superior não é restrito ao máximo empírico do dataset (-56 dBm)
+        #   Isso permite que a rede aprenda a extrapolação física correta caso seja exposta a locais (OOD) mais próximos da antena do que os
+        #   medidos no Drive Test
+        #   Matemática: [-1, 1] * 72 = [-72, 72]. Deslocando: [-72, 72] - 102 = [-174, -30] dBm
+        return torch.tanh(out) * 72.0 - 102.0

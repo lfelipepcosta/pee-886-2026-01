@@ -14,7 +14,7 @@ sys.path.append(repo_root)
 from qml.luiz_costa.loaders.data_loader import DataLoader5G
 from qml.luiz_costa.loaders.data_preprocessor import create_preprocessor, NUMERIC_FEATURES, CATEGORICAL_FEATURE
 from qml.luiz_costa.trainer.xgboost_trainer import XGBoostWrapper
-from qml.luiz_costa.evaluation.cross_validation import run_kfold_validation
+from qml.luiz_costa.evaluation.cross_validation import run_kfold_validation, run_gkfold_validation
 from qml.luiz_costa.visualization.plotting import plot_feature_importance, plot_actual_vs_predicted, plot_error_distribution, plot_learning_curve
 
 # Define locais para salvamento de modelos e resultados no data/luiz_costa
@@ -65,8 +65,17 @@ def main():
     # Realiza a avaliação estatística com K-Fold Cross Validation
     run_kfold_validation(pipeline, X, y, n_splits=5, output_dir=RESULTS_DIR)
 
+    # Estima o erro de generalização através de K-Fold Espacial (GroupKFold por Antena)
+    groups = df['Antena_Lat'].astype(str) + "_" + df['Antena_Lon'].astype(str)
+    run_gkfold_validation(pipeline, X, y, groups=groups, n_splits=5, output_dir=RESULTS_DIR)
+
     # Treina o modelo para avaliação de gráficos de dispersão e distribuição
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    
+    print(f"Dataset total: {len(X)} amostras únicas.")
+    print(f"Treinamento:   {len(X_train)} amostras.")
+    print(f"Teste:         {len(X_test)} amostras.")
+    
     pipeline.fit(X_train, y_train)
     y_pred = pipeline.predict(X_test)
 

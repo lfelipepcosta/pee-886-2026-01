@@ -24,14 +24,14 @@ def optuna_objective(trial, X_train, y_train, X_val, y_val):
     '''
     Função objetivo para minimizar o RMSE do XGBoost através do Optuna.
     '''
-    # Espaço de busca para os principais parâmetros do Gradient Boosting
+    # Espaço de busca focado em regularização para EVITAR Overfitting Espacial
     params = {
-        'n_estimators': trial.suggest_int('n_estimators', 100, 800, step=100),
-        'max_depth': trial.suggest_int('max_depth', 3, 12),
-        'learning_rate': trial.suggest_float('learning_rate', 0.01, 0.3, log=True),
-        'subsample': trial.suggest_float('subsample', 0.6, 1.0),
-        'colsample_bytree': trial.suggest_float('colsample_bytree', 0.6, 1.0),
-        'min_child_weight': trial.suggest_int('min_child_weight', 1, 10),
+        'n_estimators': trial.suggest_int('n_estimators', 100, 300, step=50),
+        'max_depth': trial.suggest_int('max_depth', 2, 4), # Árvores bem mais rasas
+        'learning_rate': trial.suggest_float('learning_rate', 0.01, 0.1, log=True),
+        'subsample': trial.suggest_float('subsample', 0.6, 0.9),
+        'colsample_bytree': trial.suggest_float('colsample_bytree', 0.6, 0.9),
+        'min_child_weight': trial.suggest_int('min_child_weight', 20, 100), # Folhas com muitos pontos
         'random_state': 42,
         'verbose': False 
     }

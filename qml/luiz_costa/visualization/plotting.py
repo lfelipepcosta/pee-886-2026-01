@@ -37,7 +37,7 @@ def plot_actual_vs_predicted(y_test, y_pred, target_name, output_dir):
     plt.figure(figsize=(10, 8))
     
     # Amostra pontos aleatórios para evitar que o gráfico PDF fique muito pesado
-    sample_size = min(5000, len(y_test))
+    sample_size = min(25000, len(y_test))
     sample_idx = np.random.choice(len(y_test), sample_size, replace=False)
     y_test_vals = y_test.iloc[sample_idx] if hasattr(y_test, 'iloc') else y_test[sample_idx]
     
@@ -122,18 +122,31 @@ def plot_coverage_map(df_coverage, df_route, df_antennas, model_name, target_nam
 
 def plot_learning_curve(history, model_name, target_name, output_dir):
     '''
-    Gera um gráfico da curva de aprendizado (Perda vs Épocas) para monitorar convergência.
+    Gera um gráfico da curva de aprendizado para monitorar convergência.
+    Padroniza todos os erros para RMSE.
     '''
     print(f"Gerando curva de aprendizado para {model_name}")
     plt.figure(figsize=(10, 6))
     
-    epochs = range(1, len(history['train_loss']) + 1)
-    plt.plot(epochs, history['train_loss'], 'b-', label='Treino', linewidth=2)
-    plt.plot(epochs, history['val_loss'], 'r-', label='Validação', linewidth=2)
+    # Se for XGBoost, o X é estimadores e o histórico já é RMSE
+    if model_name.lower() == "xgboost":
+        train_loss = history['train_loss']
+        val_loss = history['val_loss']
+        x_label = 'Estimadores (Árvores)'
+    # Se for PyTorch (MLP/Hybrid), o X é épocas e o histórico é MSE (precisa tirar a raiz)
+    else:
+        train_loss = np.sqrt(history['train_loss'])
+        val_loss = np.sqrt(history['val_loss'])
+        x_label = 'Épocas de Treinamento'
+        
+    x_axis = range(1, len(train_loss) + 1)
+    
+    plt.plot(x_axis, train_loss, 'b-', label='Treino', linewidth=2)
+    plt.plot(x_axis, val_loss, 'r-', label='Validação', linewidth=2)
     
     plt.title(f'Curva de Aprendizado - {model_name} ({target_name})', fontsize=14)
-    plt.xlabel('Épocas / Estimadores', fontsize=12)
-    plt.ylabel('Erro (RMSE/MSE)', fontsize=12)
+    plt.xlabel(x_label, fontsize=12)
+    plt.ylabel('Erro (RMSE em dB)', fontsize=12)
     plt.grid(True, linestyle='--', alpha=0.5)
     plt.legend()
     plt.tight_layout()

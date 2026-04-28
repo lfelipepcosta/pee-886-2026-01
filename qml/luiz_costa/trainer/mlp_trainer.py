@@ -14,7 +14,7 @@ class PyTorchMLPWrapper(BaseEstimator, RegressorMixin):
     Facilita o treinamento, avaliação e uso em pipelines de regressão.
     '''
     def __init__(self, hidden_size=128, dropout_rate=0.1, num_layers=3, 
-                 learning_rate=1e-3, batch_size=512, epochs=200, patience=15, 
+                 learning_rate=1e-3, batch_size=512, epochs=50, patience=7, 
                  random_state=42, verbose=False):
         '''
         Define os parâmetros do otimizador e a estrutura da rede neural.
@@ -63,7 +63,7 @@ class PyTorchMLPWrapper(BaseEstimator, RegressorMixin):
         # Define o critério de erro (MSE) e o otimizador AdamW com regularização
         criterion = nn.MSELoss()
         optimizer = optim.AdamW(self.model.parameters(), lr=self.learning_rate, weight_decay=1e-4)
-        scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=5)
+        scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=3)
         
         best_val_loss = float('inf')
         patience_counter = 0

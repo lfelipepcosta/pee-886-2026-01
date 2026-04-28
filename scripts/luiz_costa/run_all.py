@@ -8,12 +8,21 @@ repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
 log_dir = os.path.join(repo_root, "data", "luiz_costa", "execution_reports")
 os.makedirs(log_dir, exist_ok=True)
 
-# Lista de scripts para execução do Pipeline Híbrido Quântico
+# Lista de scripts para execução do Pipeline ABSOLUTAMENTE COMPLETO (Baselines + Híbrido)
 scripts = [
-    "run_optimization.py",        # 1. Otimização de hiperparâmetros (Optuna)
-    "run_main.py",                # 2. Treinamento final e métricas do Híbrido
-    "run_inference_hybrid.py",    # 3. Geração do mapa de cobertura Híbrido
-    "run_spatial_validation.py"   # 4. Validação espacial contra Drive Test e Baselines
+    # "run_optimization_xgb.py",    # 1. Otimização de hiperparâmetros XGBoost
+    # "run_main_xgb.py",            # 2. Treinamento final e métricas XGBoost
+    # "run_inference_xgb.py",       # 3. Geração do mapa de cobertura XGBoost
+    
+    "run_optimization_mlp.py",    # 4. Otimização de hiperparâmetros MLP
+    "run_main_mlp.py",            # 5. Treinamento final e métricas MLP
+    "run_inference_mlp.py",       # 6. Geração do mapa de cobertura MLP
+    
+    # "run_optimization.py",        # 7. Otimização de hiperparâmetros Híbrido Quântico
+    # "run_main.py",                # 8. Treinamento final e métricas Híbrido
+    # "run_inference_hybrid.py",    # 9. Geração do mapa de cobertura Híbrido
+    
+    "run_spatial_validation.py"   # 10. Validação espacial (Comparação de todos os modelos)
 ]
 
 # Configura o caminho completo do arquivo de log no diretório data

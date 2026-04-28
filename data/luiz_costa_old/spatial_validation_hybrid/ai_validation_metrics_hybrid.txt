@@ -1,0 +1,15 @@
+Relatório de Validação de Campo IA (hybrid) (Grade 30m)
+Dados Totais (18650 pontos alinhados)
+RMSE : 18.83 dB
+MSE  : 354.74 dB
+Erro Médio (Viés ± Desvio Padrão): 8.05 ± 17.03 dB
+
+Dados Filtrados (Distância <= 40.0m, 18650 pontos)
+RMSE : 18.83 dB
+MSE  : 354.74 dB
+Erro Médio (Viés ± Desvio Padrão): 8.05 ± 17.03 dB
+
+Dados Calibrados (Compensação de 8.05 dB)
+RMSE Calibrado : 17.03 dB
+MSE Calibrado  : 289.87 dB
+Erro Médio Calib. (Viés ± Desvio Padrão): 0.00 ± 17.03 dB

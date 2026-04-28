@@ -170,32 +170,49 @@ class DataLoader5G:
     def load_all_datasets(self):
         '''
         Carrega e une todos os conjuntos de dados em um único DataFrame processado.
-        Usa um arquivo CSV de cache para evitar reprocessamento demorado.
+        Aplica o agrupamento por coordenadas para extrair a média do sinal (RSRP) 
+        por ponto único, eliminando redundâncias e ruído de medição parado.
         '''
         cache_file = os.path.join(self.cache_dir, "dt_5g_final_processed.csv")
         
         # Tenta ler do cache se o arquivo já existir
         if os.path.exists(cache_file):
             print(f"Lendo dados consolidados do cache em {cache_file}")
-            return pd.read_csv(cache_file, low_memory=False)
+            df = pd.read_csv(cache_file, low_memory=False)
+        else:
+            print("Montando dataset do zero")
+            self.df_licensing = pd.read_csv(self.path_licensing, low_memory=False)
+            df_5g = pd.read_csv(self.path_5g, low_memory=False)
             
-        print("Montando dataset do zero")
-        self.df_licensing = pd.read_csv(self.path_licensing, low_memory=False)
-        df_5g = pd.read_csv(self.path_5g, low_memory=False)
-        
-        # Faz o cruzamento espacial com os arquivos raster de relevo e uso do solo
-        df_5g = self._extract_raster_values(df_5g, self.path_height, 'Height_m')
-        df_5g = self._extract_raster_values(df_5g, self.path_clutter, 'Clutter_Class')
-        
-        # Limpa nomes das colunas e calcula a frequência a partir do ARFCN
-        df_5g.columns = df_5g.columns.str.strip()
-        if 'SSB NR-ARFCN' in df_5g.columns:
-            df_5g['Freq_Medida_DT_MHz'] = df_5g['SSB NR-ARFCN'].apply(convert_arfcn_5g)
+            # Faz o cruzamento espacial com os arquivos raster de relevo e uso do solo
+            df_5g = self._extract_raster_values(df_5g, self.path_height, 'Height_m')
+            df_5g = self._extract_raster_values(df_5g, self.path_clutter, 'Clutter_Class')
             
-        # Busca a antena mais próxima para cada medição 5G
-        df_5g = self._find_nearest_antenna(df_5g, tech='NR|5G|IMT')
+            # Limpa nomes das colunas e calcula a frequência a partir do ARFCN
+            df_5g.columns = df_5g.columns.str.strip()
+            if 'SSB NR-ARFCN' in df_5g.columns:
+                df_5g['Freq_Medida_DT_MHz'] = df_5g['SSB NR-ARFCN'].apply(convert_arfcn_5g)
+                
+            # Busca a antena mais próxima para cada medição 5G
+            df_5g = self._find_nearest_antenna(df_5g, tech='NR|5G|IMT')
+            df = df_5g
+
+        # AGREGAR POR COORDENADAS: Tira a média do sinal para cada ponto geográfico único
+        print(f"Agrupando {len(df)} linhas por coordenadas únicas")
         
-        # Salva o resultado final no cache
-        df_5g.to_csv(cache_file, index=False)
-        print("Dataset criado e salvo no cache")
-        return df_5g
+        # Define as colunas que devem ser mantidas (características da localização e antena)
+        group_cols = ['Latitude', 'Longitude', 'Antena_Lat', 'Antena_Lon', 'Clutter_Class', 'Height_m', 
+                      'Dist_Antena_m', 'Delta_Azimute', 'Antena_Altura', 'Antena_Ganho', 
+                      'Antena_AnguloMeiaPotencia', 'Antena_FrenteCosta', 'Antena_AnguloElevacao', 'Freq_Medida_DT_MHz']
+        
+        # Agrupa e tira a média do SS-RSRP (target)
+        df_grouped = df.groupby(group_cols, as_index=False)['SS-RSRP'].mean()
+        
+        print(f"Dataset reduzido para {len(df_grouped)} pontos geográficos únicos")
+        
+        # Salva o resultado final no cache apenas se não for leitura de cache
+        if not os.path.exists(cache_file):
+            df_grouped.to_csv(cache_file, index=False)
+            print("Dataset criado e salvo no cache")
+            
+        return df_grouped

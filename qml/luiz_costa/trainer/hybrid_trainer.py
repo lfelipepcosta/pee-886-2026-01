@@ -13,7 +13,7 @@ class PyTorchHybridWrapper(BaseEstimator, RegressorMixin):
     Wrapper para tornar o modelo híbrido compatível com a API do Scikit-Learn.
     Permite usar o modelo em pipelines e funções de validação cruzada.
     '''
-    def __init__(self, quantum_layers=1, n_qubits=4, hidden_size=64, learning_rate=1e-3, batch_size=256, epochs=50, patience=5, random_state=42, verbose=False):
+    def __init__(self, quantum_layers=1, n_qubits=4, hidden_size=64, learning_rate=1e-3, batch_size=256, epochs=50, patience=7, random_state=42, verbose=False):
         '''
         Inicializa os hiperparâmetros de treinamento e a arquitetura do modelo.
         '''
@@ -54,17 +54,13 @@ class PyTorchHybridWrapper(BaseEstimator, RegressorMixin):
         # Inicializa a rede neural híbrida
         self.input_dim = X_arr.shape[1]
         self.model = HybridQuantumNet(self.input_dim, quantum_layers=self.quantum_layers, n_qubits=self.n_qubits, hidden_size=self.hidden_size)
-        
-        # Inicializa o viés da última camada com a média do sinal para acelerar a convergência
-        with torch.no_grad():
-            nn.init.constant_(self.model.post_net.bias, y_arr.mean())
             
         self.model.to(self.device)
         
         # Define a função de perda (MSE) e o otimizador AdamW
         criterion = nn.MSELoss()
         optimizer = optim.AdamW(self.model.parameters(), lr=self.learning_rate, weight_decay=1e-4) # AdamW com regularização weight decay
-        scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=2)
+        scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=3)
         
         best_val_loss = float('inf')
         patience_counter = 0
@@ -151,9 +147,33 @@ class PyTorchHybridWrapper(BaseEstimator, RegressorMixin):
     def __getstate__(self):
         '''
         Prepara a instância para ser serializada (via joblib/pickle).
-        Garante que o modelo esteja na CPU para evitar erros com tensores CUDA.
+        Como camadas do PennyLane (TorchLayer) não podem ser 'pickled' diretamente,
+        salvamos apenas a arquitetura e os pesos (state_dict).
         '''
         state = self.__dict__.copy()
         if self.model is not None:
             self.model.cpu()
+            # Salva apenas os pesos do modelo PyTorch
+            state['model_state_dict'] = self.model.state_dict()
+            # Remove o objeto do modelo que não pode ser serializado
+            state['model'] = None
         return state
+
+    def __setstate__(self, state):
+        '''
+        Restaura o estado do modelo após o carregamento.
+        Recria a rede neural e injeta os pesos salvos.
+        '''
+        self.__dict__.update(state)
+        if hasattr(self, 'model_state_dict') and self.model_state_dict is not None:
+            # Recria a arquitetura original
+            self.model = HybridQuantumNet(
+                input_dim=self.input_dim, 
+                quantum_layers=self.quantum_layers, 
+                n_qubits=self.n_qubits, 
+                hidden_size=self.hidden_size
+            )
+            # Carrega os pesos
+            self.model.load_state_dict(self.model_state_dict)
+            self.model.to(self.device)
+            self.model.eval()
