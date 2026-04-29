@@ -1,15 +1,15 @@
 Relatório de Validação de Campo IA (mlp) (Grade 30m)
 Dados Totais (18650 pontos alinhados)
-RMSE : 9.28 dB
-MSE  : 86.20 dB
-Erro Médio (Viés ± Desvio Padrão): 5.62 ± 7.39 dB
+RMSE : 8.68 dB
+MSE  : 75.39 dB
+Erro Médio (Viés ± Desvio Padrão): 4.69 ± 7.31 dB
 
 Dados Filtrados (Distância <= 40.0m, 18650 pontos)
-RMSE : 9.28 dB
-MSE  : 86.20 dB
-Erro Médio (Viés ± Desvio Padrão): 5.62 ± 7.39 dB
+RMSE : 8.68 dB
+MSE  : 75.39 dB
+Erro Médio (Viés ± Desvio Padrão): 4.69 ± 7.31 dB
 
-Dados Calibrados (Compensação de 5.62 dB)
-RMSE Calibrado : 7.39 dB
-MSE Calibrado  : 54.65 dB
-Erro Médio Calib. (Viés ± Desvio Padrão): 0.00 ± 7.39 dB
+Dados Calibrados (Compensação de 4.69 dB)
+RMSE Calibrado : 7.31 dB
+MSE Calibrado  : 53.43 dB
+Erro Médio Calib. (Viés ± Desvio Padrão): 0.00 ± 7.31 dB

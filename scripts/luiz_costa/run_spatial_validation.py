@@ -206,7 +206,17 @@ def validate_ai_coverage(parquet_path, dt_path, output_dir, model_name):
     ax3.axhline(0, color='red', linestyle='--', linewidth=2)
     
     # Mapeia códigos de Clutter para nomes amigáveis no gráfico
-    dicionario_clutter = {0.0: "Sem dados", 1.0: "Urbano denso", 2.0: "Urbano", 3.0: "Urbano médio", 4.0: "Urbano baixo", 5.0: "Suburbano", 6.0: "Favelas", 7.0: "Urbano arborizado", 8.0: "Urbano aberto", 11.0: "Aberto", 14.0: "Vegetação densa", 15.0: "Vegetação média", 16.0: "Vegetação esparsa", 17.0: "Pastagem", 21.0: "Água"}
+    dicionario_clutter = {
+        0.0: "Sem dados", 1.0: "Urbana Muito Alta", 2.0: "Urbana Alta", 3.0: "Urbana Média", 
+        4.0: "Urbana Baixa", 5.0: "Suburbana", 6.0: "Suburbana Desordenada", 
+        7.0: "Área Urbana Arborizada", 8.0: "Área Urbana Aberta", 9.0: "Área Industrial Baixa", 
+        10.0: "Área Industrial Alta", 11.0: "Área Aberta", 12.0: "Aeroporto Terminal", 
+        13.0: "Aeroporto Pista", 14.0: "Vegetação de Alto Porte", 15.0: "Vegetação de Médio Porte", 
+        16.0: "Vegetação de Baixo Porte", 17.0: "Pastagem", 18.0: "Agrícolas", 
+        19.0: "Área de Reflorestamento", 20.0: "Oceano", 21.0: "Água", 22.0: "Dunas", 
+        23.0: "Afloramento Rochoso", 24.0: "Mangue", 25.0: "Porto", 26.0: "Logradouro", 
+        27.0: "Rodovias", 28.0: "Ferrovias"
+    }
     unique_clutters = sorted(strict_gdf['Clutter'].dropna().unique())
     labels = [dicionario_clutter.get(val, str(val)) for val in unique_clutters]
     ax3.set_xticks(unique_clutters)

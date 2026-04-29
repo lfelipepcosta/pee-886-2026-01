@@ -18,9 +18,9 @@ scripts = [
     "run_main_mlp.py",            # 5. Treinamento final e métricas MLP
     "run_inference_mlp.py",       # 6. Geração do mapa de cobertura MLP
     
-    # "run_optimization.py",        # 7. Otimização de hiperparâmetros Híbrido Quântico
-    # "run_main.py",                # 8. Treinamento final e métricas Híbrido
-    # "run_inference_hybrid.py",    # 9. Geração do mapa de cobertura Híbrido
+    "run_optimization.py",        # 7. Otimização de hiperparâmetros Híbrido Quântico
+    "run_main.py",                # 8. Treinamento final e métricas Híbrido
+    "run_inference_hybrid.py",    # 9. Geração do mapa de cobertura Híbrido
     
     "run_spatial_validation.py"   # 10. Validação espacial (Comparação de todos os modelos)
 ]
