@@ -1,6 +1,11 @@
 Relatório de Métricas Finais (Amostra de Teste) - MLP Clássico
 ============================================================
-RMSE : 3.7242 dB
-MAE  : 2.6881 dB
-R2   : 0.9373
+Antenas Únicas no Dataset (Treino+Teste): 207
+Dataset Total (S/ Antenas Blind): 58940 amostras
+Amostras de Treino: 47152
+Amostras de Teste Interno: 11788
+------------------------------------------------------------
+RMSE : 3.6594 dB
+MAE  : 2.5464 dB
+R2   : 0.9413
 ============================================================

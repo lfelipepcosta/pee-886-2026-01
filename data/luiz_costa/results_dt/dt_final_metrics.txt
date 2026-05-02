@@ -1,0 +1,11 @@
+Relatório de Métricas Finais (Amostra de Teste) - Decision Tree
+============================================================
+Antenas Únicas no Dataset (Treino+Teste): 207
+Dataset Total (S/ Antenas Blind): 58940 amostras
+Amostras de Treino: 47152
+Amostras de Teste Interno: 11788
+------------------------------------------------------------
+RMSE : 6.0195 dB
+MAE  : 4.4038 dB
+R2   : 0.8413
+============================================================

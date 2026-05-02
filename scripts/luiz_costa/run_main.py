@@ -63,12 +63,12 @@ def main():
     # Cria a pipeline integrando pré-processador e o modelo quântico
     pipeline = Pipeline(steps=[('preprocessor', create_preprocessor()), ('model', model)])
 
-    # Executa a validação cruzada para estimar a flutuação estatística do erro
-    run_kfold_validation(pipeline, X, y, n_splits=5, output_dir=RESULTS_DIR)
+    # Estima o erro médio através de K-Fold Validation
+    run_kfold_validation(pipeline, X, y, model_name="Hybrid", n_splits=5, output_dir=RESULTS_DIR)
 
     # Estima o erro de generalização através de K-Fold Espacial (GroupKFold por Antena)
     groups = df['Antena_Lat'].astype(str) + "_" + df['Antena_Lon'].astype(str)
-    run_gkfold_validation(pipeline, X, y, groups=groups, n_splits=5, output_dir=RESULTS_DIR)
+    run_gkfold_validation(pipeline, X, y, groups=groups, model_name="Hybrid", n_splits=5, output_dir=RESULTS_DIR)
 
     # Treina o modelo final com 80% dos dados e avalia nos 20% restantes
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -85,9 +85,16 @@ def main():
     mae = mean_absolute_error(y_test, y_pred)
     r2 = r2_score(y_test, y_pred)
     
+    num_antenas = len(df[['Antena_Lat', 'Antena_Lon']].drop_duplicates())
+    
     metrics_report = (
         f"Relatório de Métricas Finais (Amostra de Teste) - Híbrido Quântico\n"
         f"{'='*60}\n"
+        f"Antenas Únicas no Dataset (Treino+Teste): {num_antenas}\n"
+        f"Dataset Total (S/ Antenas Blind): {len(X)} amostras\n"
+        f"Amostras de Treino: {len(X_train)}\n"
+        f"Amostras de Teste Interno: {len(X_test)}\n"
+        f"{'-'*60}\n"
         f"RMSE : {rmse:.4f} dB\n"
         f"MAE  : {mae:.4f} dB\n"
         f"R2   : {r2:.4f}\n"
@@ -100,11 +107,11 @@ def main():
     print(f"Métricas finais salvas em {metrics_path}")
 
     # Gera e salva os gráficos analíticos em formato PDF
-    target_label = f"{target}_Hybrid"
+    target_label = target
     plot_learning_curve(pipeline.named_steps['model'].history_, "Hybrid", target_label, output_dir=RESULTS_DIR)
-    plot_feature_importance(pipeline, X_test, y_test, target_label, output_dir=RESULTS_DIR)
-    plot_actual_vs_predicted(y_test, y_pred, target_label, output_dir=RESULTS_DIR)
-    plot_error_distribution(y_test, y_pred, target_label, output_dir=RESULTS_DIR)
+    plot_feature_importance(pipeline, X_test, y_test, target_label, "Hybrid", output_dir=RESULTS_DIR)
+    plot_actual_vs_predicted(y_test, y_pred, target_label, "Hybrid", output_dir=RESULTS_DIR)
+    plot_error_distribution(y_test, y_pred, target_label, "Hybrid", output_dir=RESULTS_DIR)
     
     # Salva o pipeline treinado em disco para uso posterior em inferência
     saved_model_path = os.path.join(MODEL_DIR, "best_pipeline_hybrid.joblib")

@@ -1,0 +1,190 @@
+Relatório de Benchmark de Tempo de Execução
+Início: Thu Apr 30 21:16:26 2026
+============================================================
+
+--- RODADA 1/5 ---
+R1 | run_optimization_dt.py: SUCESSO (6.60s)
+R1 | run_main_dt.py: SUCESSO (5.71s)
+R1 | run_inference_dt.py: SUCESSO (151.36s)
+--> Tempo Total Pipeline DecisionTree (Rodada 1): 163.67s (2.73 min)
+
+R1 | run_optimization_xgb.py: SUCESSO (27.46s)
+R1 | run_main_xgb.py: SUCESSO (15.67s)
+R1 | run_inference_xgb.py: SUCESSO (157.54s)
+--> Tempo Total Pipeline XGBoost (Rodada 1): 200.66s (3.34 min)
+
+R1 | run_optimization_mlp.py: SUCESSO (807.16s)
+R1 | run_main_mlp.py: SUCESSO (288.03s)
+R1 | run_inference_mlp.py: SUCESSO (159.12s)
+--> Tempo Total Pipeline MLP (Rodada 1): 1254.31s (20.91 min)
+
+R1 | run_optimization.py: SUCESSO (690.87s)
+R1 | run_main.py: SUCESSO (2460.11s)
+R1 | run_inference_hybrid.py: SUCESSO (169.09s)
+--> Tempo Total Pipeline Hibrido (Rodada 1): 3320.07s (55.33 min)
+
+R1 | run_spatial_validation.py: SUCESSO (25.61s)
+R1 | Tempo Validação DT: 4.35s
+R1 | Tempo Validação XGB: 6.63s
+R1 | Tempo Validação MLP: 6.81s
+R1 | Tempo Validação HYBRID: 6.59s
+
+--- RODADA 2/5 ---
+R2 | run_optimization_dt.py: SUCESSO (2.48s)
+R2 | run_main_dt.py: SUCESSO (5.02s)
+R2 | run_inference_dt.py: SUCESSO (155.09s)
+--> Tempo Total Pipeline DecisionTree (Rodada 2): 162.59s (2.71 min)
+
+R2 | run_optimization_xgb.py: SUCESSO (26.55s)
+R2 | run_main_xgb.py: SUCESSO (13.09s)
+R2 | run_inference_xgb.py: SUCESSO (158.98s)
+--> Tempo Total Pipeline XGBoost (Rodada 2): 198.62s (3.31 min)
+
+R2 | run_optimization_mlp.py: SUCESSO (798.03s)
+R2 | run_main_mlp.py: SUCESSO (181.96s)
+R2 | run_inference_mlp.py: SUCESSO (162.19s)
+--> Tempo Total Pipeline MLP (Rodada 2): 1142.18s (19.04 min)
+
+R2 | run_optimization.py: SUCESSO (564.06s)
+R2 | run_main.py: SUCESSO (1443.91s)
+R2 | run_inference_hybrid.py: SUCESSO (164.44s)
+--> Tempo Total Pipeline Hibrido (Rodada 2): 2172.42s (36.21 min)
+
+R2 | run_spatial_validation.py: SUCESSO (27.95s)
+R2 | Tempo Validação DT: 9.00s
+R2 | Tempo Validação XGB: 4.01s
+R2 | Tempo Validação MLP: 6.94s
+R2 | Tempo Validação HYBRID: 6.71s
+
+--- RODADA 3/5 ---
+R3 | run_optimization_dt.py: SUCESSO (5.11s)
+R3 | run_main_dt.py: SUCESSO (2.26s)
+R3 | run_inference_dt.py: SUCESSO (158.02s)
+--> Tempo Total Pipeline DecisionTree (Rodada 3): 165.39s (2.76 min)
+
+R3 | run_optimization_xgb.py: SUCESSO (23.91s)
+R3 | run_main_xgb.py: SUCESSO (12.75s)
+R3 | run_inference_xgb.py: SUCESSO (160.43s)
+--> Tempo Total Pipeline XGBoost (Rodada 3): 197.09s (3.28 min)
+
+R3 | run_optimization_mlp.py: SUCESSO (791.33s)
+R3 | run_main_mlp.py: SUCESSO (249.66s)
+R3 | run_inference_mlp.py: SUCESSO (162.02s)
+--> Tempo Total Pipeline MLP (Rodada 3): 1203.01s (20.05 min)
+
+R3 | run_optimization.py: SUCESSO (450.58s)
+R3 | run_main.py: SUCESSO (2402.89s)
+R3 | run_inference_hybrid.py: SUCESSO (168.84s)
+--> Tempo Total Pipeline Hibrido (Rodada 3): 3022.31s (50.37 min)
+
+R3 | run_spatial_validation.py: SUCESSO (26.47s)
+R3 | Tempo Validação DT: 5.44s
+R3 | Tempo Validação XGB: 6.59s
+R3 | Tempo Validação MLP: 6.60s
+R3 | Tempo Validação HYBRID: 6.57s
+
+--- RODADA 4/5 ---
+R4 | run_optimization_dt.py: SUCESSO (4.99s)
+R4 | run_main_dt.py: SUCESSO (2.50s)
+R4 | run_inference_dt.py: SUCESSO (154.50s)
+--> Tempo Total Pipeline DecisionTree (Rodada 4): 161.99s (2.70 min)
+
+R4 | run_optimization_xgb.py: SUCESSO (23.80s)
+R4 | run_main_xgb.py: SUCESSO (10.28s)
+R4 | run_inference_xgb.py: SUCESSO (160.05s)
+--> Tempo Total Pipeline XGBoost (Rodada 4): 194.14s (3.24 min)
+
+R4 | run_optimization_mlp.py: SUCESSO (773.78s)
+R4 | run_main_mlp.py: SUCESSO (260.14s)
+R4 | run_inference_mlp.py: SUCESSO (157.12s)
+--> Tempo Total Pipeline MLP (Rodada 4): 1191.04s (19.85 min)
+
+R4 | run_optimization.py: SUCESSO (483.17s)
+R4 | run_main.py: SUCESSO (1885.99s)
+R4 | run_inference_hybrid.py: SUCESSO (162.10s)
+--> Tempo Total Pipeline Hibrido (Rodada 4): 2531.26s (42.19 min)
+
+R4 | run_spatial_validation.py: SUCESSO (24.99s)
+R4 | Tempo Validação DT: 6.46s
+R4 | Tempo Validação XGB: 6.21s
+R4 | Tempo Validação MLP: 6.13s
+R4 | Tempo Validação HYBRID: 5.04s
+
+--- RODADA 5/5 ---
+R5 | run_optimization_dt.py: SUCESSO (4.87s)
+R5 | run_main_dt.py: SUCESSO (4.49s)
+R5 | run_inference_dt.py: SUCESSO (150.27s)
+--> Tempo Total Pipeline DecisionTree (Rodada 5): 159.64s (2.66 min)
+
+R5 | run_optimization_xgb.py: SUCESSO (23.04s)
+R5 | run_main_xgb.py: SUCESSO (13.17s)
+R5 | run_inference_xgb.py: SUCESSO (154.39s)
+--> Tempo Total Pipeline XGBoost (Rodada 5): 190.60s (3.18 min)
+
+R5 | run_optimization_mlp.py: SUCESSO (841.26s)
+R5 | run_main_mlp.py: SUCESSO (294.05s)
+R5 | run_inference_mlp.py: SUCESSO (156.50s)
+--> Tempo Total Pipeline MLP (Rodada 5): 1291.81s (21.53 min)
+
+R5 | run_optimization.py: SUCESSO (482.98s)
+R5 | run_main.py: SUCESSO (1447.60s)
+R5 | run_inference_hybrid.py: SUCESSO (162.79s)
+--> Tempo Total Pipeline Hibrido (Rodada 5): 2093.37s (34.89 min)
+
+R5 | run_spatial_validation.py: SUCESSO (25.41s)
+R5 | Tempo Validação DT: 6.19s
+R5 | Tempo Validação XGB: 5.94s
+R5 | Tempo Validação MLP: 6.11s
+R5 | Tempo Validação HYBRID: 6.06s
+
+============================================================
+RESULTADOS FINAIS DO BENCHMARK
+============================================================
+
+Pipeline: DecisionTree
+Tempos (em segundos):
+  - 163.67s (2.73 min)
+  - 162.59s (2.71 min)
+  - 165.39s (2.76 min)
+  - 161.99s (2.70 min)
+  - 159.64s (2.66 min)
+Média: 162.66s (2.71 min)
+Desvio Padrão: 2.12s (0.04 min)
+----------------------------------------
+
+Pipeline: XGBoost
+Tempos (em segundos):
+  - 200.66s (3.34 min)
+  - 198.62s (3.31 min)
+  - 197.09s (3.28 min)
+  - 194.14s (3.24 min)
+  - 190.60s (3.18 min)
+Média: 196.22s (3.27 min)
+Desvio Padrão: 3.94s (0.07 min)
+----------------------------------------
+
+Pipeline: MLP
+Tempos (em segundos):
+  - 1254.31s (20.91 min)
+  - 1142.18s (19.04 min)
+  - 1203.01s (20.05 min)
+  - 1191.04s (19.85 min)
+  - 1291.81s (21.53 min)
+Média: 1216.47s (20.27 min)
+Desvio Padrão: 58.00s (0.97 min)
+----------------------------------------
+
+Pipeline: Hibrido
+Tempos (em segundos):
+  - 3320.07s (55.33 min)
+  - 2172.42s (36.21 min)
+  - 3022.31s (50.37 min)
+  - 2531.26s (42.19 min)
+  - 2093.37s (34.89 min)
+Média: 2627.88s (43.80 min)
+Desvio Padrão: 533.19s (8.89 min)
+----------------------------------------
+
+============================================================
+Fim do Benchmark: Fri May  1 03:08:52 2026
+Tempo Total Geral: 352.44 min

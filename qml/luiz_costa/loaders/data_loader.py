@@ -174,11 +174,17 @@ class DataLoader5G:
         por ponto único, eliminando redundâncias e ruído de medição parado.
         '''
         cache_file = os.path.join(self.cache_dir, "dt_5g_final_processed.csv")
+        train_cache_file = os.path.join(self.cache_dir, "dt_5g_train.csv")
+        blind_cache_file = os.path.join(self.cache_dir, "dt_5g_blind_test.csv")
         
-        # Tenta ler do cache se o arquivo já existir
+        # Tenta ler do cache de treino se já existir
+        if os.path.exists(train_cache_file) and os.path.exists(blind_cache_file):
+            print(f"Lendo dados de treino do cache em {train_cache_file}")
+            return pd.read_csv(train_cache_file, low_memory=False)
+
         if os.path.exists(cache_file):
             print(f"Lendo dados consolidados do cache em {cache_file}")
-            df = pd.read_csv(cache_file, low_memory=False)
+            df_grouped = pd.read_csv(cache_file, low_memory=False)
         else:
             print("Montando dataset do zero")
             self.df_licensing = pd.read_csv(self.path_licensing, low_memory=False)
@@ -197,22 +203,44 @@ class DataLoader5G:
             df_5g = self._find_nearest_antenna(df_5g, tech='NR|5G|IMT')
             df = df_5g
 
-        # AGREGAR POR COORDENADAS: Tira a média do sinal para cada ponto geográfico único
-        print(f"Agrupando {len(df)} linhas por coordenadas únicas")
-        
-        # Define as colunas que devem ser mantidas (características da localização e antena)
-        group_cols = ['Latitude', 'Longitude', 'Antena_Lat', 'Antena_Lon', 'Clutter_Class', 'Height_m', 
-                      'Dist_Antena_m', 'Delta_Azimute', 'Antena_Altura', 'Antena_Ganho', 
-                      'Antena_AnguloMeiaPotencia', 'Antena_FrenteCosta', 'Antena_AnguloElevacao', 'Freq_Medida_DT_MHz']
-        
-        # Agrupa e tira a média do SS-RSRP (target)
-        df_grouped = df.groupby(group_cols, as_index=False)['SS-RSRP'].mean()
-        
-        print(f"Dataset reduzido para {len(df_grouped)} pontos geográficos únicos")
-        
-        # Salva o resultado final no cache apenas se não for leitura de cache
-        if not os.path.exists(cache_file):
-            df_grouped.to_csv(cache_file, index=False)
-            print("Dataset criado e salvo no cache")
+            # AGREGAR POR COORDENADAS: Tira a média do sinal para cada ponto geográfico único
+            print(f"Agrupando {len(df)} linhas por coordenadas únicas")
             
-        return df_grouped
+            # Define as colunas que devem ser mantidas (características da localização e antena)
+            group_cols = ['Latitude', 'Longitude', 'Antena_Lat', 'Antena_Lon', 'Clutter_Class', 'Height_m', 
+                          'Dist_Antena_m', 'Delta_Azimute', 'Antena_Altura', 'Antena_Ganho', 
+                          'Antena_AnguloMeiaPotencia', 'Antena_FrenteCosta', 'Antena_AnguloElevacao', 'Freq_Medida_DT_MHz']
+            
+            # Agrupa e tira a média do SS-RSRP (target)
+            df_grouped = df.groupby(group_cols, as_index=False)['SS-RSRP'].mean()
+            
+            print(f"Dataset reduzido para {len(df_grouped)} pontos geográficos únicos")
+            df_grouped.to_csv(cache_file, index=False)
+            print("Dataset consolidado salvo no cache")
+
+        # Separação por Antena para o Blind Test (15%)
+        print("Realizando Separação por Antena para Blind Test (15%)")
+        np.random.seed(42)
+        unique_antennas = df_grouped[['Antena_Lat', 'Antena_Lon']].drop_duplicates()
+        
+        # Sorteia 15% das antenas para o teste espacial cego
+        n_blind = max(1, int(len(unique_antennas) * 0.15))
+        blind_antennas = unique_antennas.sample(n=n_blind, random_state=42)
+        
+        # Cria as chaves de cruzamento
+        keys_all = df_grouped['Antena_Lat'].astype(str) + "_" + df_grouped['Antena_Lon'].astype(str)
+        keys_blind = blind_antennas['Antena_Lat'].astype(str) + "_" + blind_antennas['Antena_Lon'].astype(str)
+        
+        is_blind = keys_all.isin(keys_blind)
+        
+        df_train = df_grouped[~is_blind].copy()
+        df_blind = df_grouped[is_blind].copy()
+        
+        print(f"Antenas totais: {len(unique_antennas)} | Antenas Treino: {len(unique_antennas)-n_blind} | Antenas Blind Test: {n_blind}")
+        print(f"Pontos de Treino: {len(df_train)} | Pontos de Blind Test: {len(df_blind)}")
+        
+        df_train.to_csv(train_cache_file, index=False)
+        df_blind.to_csv(blind_cache_file, index=False)
+        print("Datasets (Train e Blind Test) salvos no cache")
+        
+        return df_train

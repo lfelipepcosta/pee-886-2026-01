@@ -1,0 +1,19 @@
+Relatório de Validação de Campo IA (mlp) (Grade 30m)
+--- INFORMAÇÕES DO BLIND TEST ---
+Antenas Ocultas (Blind Test): 36
+Pontos Totais de Blind Test: 12328
+---------------------------------
+Dados Totais (8155 pontos alinhados)
+RMSE : 13.15 dB
+MSE  : 172.96 dB
+Erro Médio (Viés ± Desvio Padrão): 5.43 ± 11.98 dB
+
+Dados Filtrados (Distância <= 40.0m, 8155 pontos)
+RMSE : 13.15 dB
+MSE  : 172.96 dB
+Erro Médio (Viés ± Desvio Padrão): 5.43 ± 11.98 dB
+
+Dados Calibrados (Compensação de 5.43 dB)
+RMSE Calibrado : 11.98 dB
+MSE Calibrado  : 143.49 dB
+Erro Médio Calib. (Viés ± Desvio Padrão): 0.00 ± 11.98 dB

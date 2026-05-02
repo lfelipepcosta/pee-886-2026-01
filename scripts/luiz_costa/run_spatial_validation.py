@@ -15,7 +15,7 @@ sys.path.append(repo_root)
 
 # Caminhos base para arquivos geográficos, drive tests e rasters de altimetria
 BASE_PATH = "/home/luiz.costa/anatel_data/_mapas"
-DT_PATH = os.path.join(BASE_PATH, "Dados_DT", "DT_Ntero_5G.csv")
+DT_PATH = os.path.join("/home/luiz.costa/anatel_data/qml_data", "dt_5g_blind_test.csv")
 PATH_CLUTTER = os.path.join(BASE_PATH, "RJ", "RJ", "RJ_Clutter_v5.tif")
 PATH_ELEVATION = os.path.join(BASE_PATH, "RJ", "RJ", "RJ_Heights.tif")
 MAX_DISTANCE_M = 40.0
@@ -114,8 +114,14 @@ def validate_ai_coverage(parquet_path, dt_path, output_dir, model_name):
     calib_std = np.std(calib_errors)
 
     # Monta o relatório de métricas detalhado
+    num_blind_antennas = len(dt_df[['Antena_Lat', 'Antena_Lon']].drop_duplicates()) if 'Antena_Lat' in dt_df.columns else "Desconhecido"
+    
     report = (
         f"Relatório de Validação de Campo IA ({model_name}) (Grade 30m)\n"
+        f"--- INFORMAÇÕES DO BLIND TEST ---\n"
+        f"Antenas Ocultas (Blind Test): {num_blind_antennas}\n"
+        f"Pontos Totais de Blind Test: {len(dt_df)}\n"
+        f"---------------------------------\n"
         f"Dados Totais ({len(validation_gdf)} pontos alinhados)\n"
         f"RMSE : {raw_rmse:.2f} dB\n"
         f"MSE  : {raw_mse:.2f} dB\n"
@@ -131,7 +137,7 @@ def validate_ai_coverage(parquet_path, dt_path, output_dir, model_name):
     )
 
     # Exporta resultados para arquivo texto
-    with open(f"{output_dir}/ai_validation_metrics_{model_name}.txt", "w", encoding="utf-8") as f:
+    with open(f"{output_dir}/{model_name}_ai_validation_metrics.txt", "w", encoding="utf-8") as f:
         f.write(report)
 
     # Renderiza gráficos comparativos de dispersão e histogramas de erro
@@ -157,7 +163,7 @@ def validate_ai_coverage(parquet_path, dt_path, output_dir, model_name):
         ax_hist.set_xlabel("Erro (Predito - Real) [dB]", fontsize=20)
         ax_hist.set_ylabel("Frequência", fontsize=20)
         ax_hist.grid(True, linestyle='--', alpha=0.5)
-    plt.savefig(f"{output_dir}/ai_validation_plots_{model_name}.pdf", dpi=300, bbox_inches='tight')
+    plt.savefig(f"{output_dir}/{model_name}_ai_validation_plots.pdf", dpi=300, bbox_inches='tight')
     plt.close(fig)
 
     # Gera gráfico da Função de Distribuição Acumulada (CDF) do erro absoluto
@@ -184,7 +190,7 @@ def validate_ai_coverage(parquet_path, dt_path, output_dir, model_name):
     plt.ylim([0, 1.05])
     plt.grid(True, linestyle='--', alpha=0.5)
     plt.legend(loc='lower right', fontsize='large')
-    plt.savefig(f"{output_dir}/ai_validation_cdf_{model_name}.pdf", dpi=300, bbox_inches='tight')
+    plt.savefig(f"{output_dir}/{model_name}_ai_validation_cdf.pdf", dpi=300, bbox_inches='tight')
     plt.close()
 
     # Gera visualização 3D correlacionando erro com características físicas do ambiente
@@ -225,7 +231,7 @@ def validate_ai_coverage(parquet_path, dt_path, output_dir, model_name):
     ax3.set_title('Erro por Categoria de Clutter', fontweight='bold'); ax3.grid(True, linestyle='--', alpha=0.5)
 
     plt.tight_layout()
-    plt.savefig(f"{output_dir}/ai_validation_env_merit_{model_name}.pdf", dpi=300, bbox_inches='tight')
+    plt.savefig(f"{output_dir}/{model_name}_ai_validation_env_merit.pdf", dpi=300, bbox_inches='tight')
     plt.close(fig3d)
     
     print(f"Validação espacial concluída em {(time.time() - start_time) / 60.0:.2f} minutos")
@@ -234,7 +240,7 @@ def main():
     '''
     Loop principal para validar sequencialmente os modelos XGB, MLP e Híbrido.
     '''
-    models = ["xgb", "mlp", "hybrid"]
+    models = ["dt", "xgb", "mlp", "hybrid"]
     for model in models:
         parquet_file = os.path.join(repo_root, "data", "luiz_costa", "inference_results", f"ai_coverage_30m_{model}.parquet")
         output_dir = os.path.join(repo_root, "data", "luiz_costa", f"spatial_validation_{model}")

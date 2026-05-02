@@ -1,6 +1,11 @@
 Relatório de Métricas Finais (Amostra de Teste) - XGBoost
 ============================================================
-RMSE : 5.9264 dB
-MAE  : 4.5513 dB
-R2   : 0.8412
+Antenas Únicas no Dataset (Treino+Teste): 207
+Dataset Total (S/ Antenas Blind): 58940 amostras
+Amostras de Treino: 47152
+Amostras de Teste Interno: 11788
+------------------------------------------------------------
+RMSE : 5.9549 dB
+MAE  : 4.5167 dB
+R2   : 0.8447
 ============================================================

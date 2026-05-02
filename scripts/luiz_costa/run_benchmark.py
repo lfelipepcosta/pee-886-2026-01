@@ -11,6 +11,11 @@ os.makedirs(log_dir, exist_ok=True)
 
 # Pipelines definidos por seus scripts
 pipelines = {
+    "DecisionTree": [
+        "run_optimization_dt.py", 
+        "run_main_dt.py", 
+        "run_inference_dt.py"
+    ],
     "XGBoost": [
         "run_optimization_xgb.py", 
         "run_main_xgb.py", 
@@ -37,6 +42,7 @@ print(f"O relatório detalhado será salvo em: {log_file}\n")
 
 # Dicionário para salvar os tempos totais de cada execução
 execution_times = {
+    "DecisionTree": [],
     "XGBoost": [],
     "MLP": [],
     "Hibrido": []
@@ -129,6 +135,7 @@ with open(log_file, "w", encoding="utf-8") as f_log:
         try:
             env = os.environ.copy()
             env["PYTHONUNBUFFERED"] = "1"
+            env["BENCHMARK_ROUND"] = str(run)
             process = subprocess.Popen(
                 ["python3", "-u", "run_spatial_validation_benchmark.py"],
                 stdout=subprocess.PIPE,

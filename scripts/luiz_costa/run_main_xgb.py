@@ -63,11 +63,11 @@ def main():
     pipeline = Pipeline(steps=[('preprocessor', create_preprocessor()), ('model', model)])
 
     # Realiza a avaliação estatística com K-Fold Cross Validation
-    run_kfold_validation(pipeline, X, y, n_splits=5, output_dir=RESULTS_DIR)
+    run_kfold_validation(pipeline, X, y, model_name="XGBoost", n_splits=5, output_dir=RESULTS_DIR)
 
     # Estima o erro de generalização através de K-Fold Espacial (GroupKFold por Antena)
     groups = df['Antena_Lat'].astype(str) + "_" + df['Antena_Lon'].astype(str)
-    run_gkfold_validation(pipeline, X, y, groups=groups, n_splits=5, output_dir=RESULTS_DIR)
+    run_gkfold_validation(pipeline, X, y, groups=groups, model_name="XGBoost", n_splits=5, output_dir=RESULTS_DIR)
 
     # Treina o modelo para avaliação de gráficos de dispersão e distribuição
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -84,9 +84,16 @@ def main():
     mae = mean_absolute_error(y_test, y_pred)
     r2 = r2_score(y_test, y_pred)
     
+    num_antenas = len(df[['Antena_Lat', 'Antena_Lon']].drop_duplicates())
+    
     metrics_report = (
         f"Relatório de Métricas Finais (Amostra de Teste) - XGBoost\n"
         f"{'='*60}\n"
+        f"Antenas Únicas no Dataset (Treino+Teste): {num_antenas}\n"
+        f"Dataset Total (S/ Antenas Blind): {len(X)} amostras\n"
+        f"Amostras de Treino: {len(X_train)}\n"
+        f"Amostras de Teste Interno: {len(X_test)}\n"
+        f"{'-'*60}\n"
         f"RMSE : {rmse:.4f} dB\n"
         f"MAE  : {mae:.4f} dB\n"
         f"R2   : {r2:.4f}\n"
@@ -98,12 +105,12 @@ def main():
         f.write(metrics_report)
     print(f"Métricas finais salvas em {metrics_path}")
 
-    # Gera análises visuais salvas em PDF 300 DPI
-    target_label = f"{target}_XGB"
+    # Exporta resultados visuais em formato PDF
+    target_label = target
     plot_learning_curve(pipeline.named_steps['model'].history_, "XGBoost", target_label, output_dir=RESULTS_DIR)
-    plot_feature_importance(pipeline, X_test, y_test, target_label, output_dir=RESULTS_DIR)
-    plot_actual_vs_predicted(y_test, y_pred, target_label, output_dir=RESULTS_DIR)
-    plot_error_distribution(y_test, y_pred, target_label, output_dir=RESULTS_DIR)
+    plot_feature_importance(pipeline, X_test, y_test, target_label, "XGBoost", output_dir=RESULTS_DIR)
+    plot_actual_vs_predicted(y_test, y_pred, target_label, "XGBoost", output_dir=RESULTS_DIR)
+    plot_error_distribution(y_test, y_pred, target_label, "XGBoost", output_dir=RESULTS_DIR)
 
     # Salva o pipeline para processos de inferência geoespacial
     saved_model_path = os.path.join(MODEL_DIR, "best_pipeline_xgb.joblib")

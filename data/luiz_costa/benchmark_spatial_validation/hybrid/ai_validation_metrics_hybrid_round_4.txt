@@ -1,0 +1,19 @@
+Relatório de Validação de Campo IA (hybrid) (Grade 30m)
+--- INFORMAÇÕES DO BLIND TEST ---
+Antenas Ocultas (Blind Test): 36
+Pontos Totais de Blind Test: 12328
+---------------------------------
+Dados Totais (8155 pontos alinhados)
+RMSE : 12.71 dB
+MSE  : 161.43 dB
+Erro Médio (Viés ± Desvio Padrão): 5.87 ± 11.27 dB
+
+Dados Filtrados (Distância <= 40.0m, 8155 pontos)
+RMSE : 12.71 dB
+MSE  : 161.43 dB
+Erro Médio (Viés ± Desvio Padrão): 5.87 ± 11.27 dB
+
+Dados Calibrados (Compensação de 5.87 dB)
+RMSE Calibrado : 11.27 dB
+MSE Calibrado  : 126.95 dB
+Erro Médio Calib. (Viés ± Desvio Padrão): 0.00 ± 11.27 dB

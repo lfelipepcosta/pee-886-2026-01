@@ -7,33 +7,33 @@ import geopandas as gpd
 from shapely.geometry import Point
 from sklearn.inspection import permutation_importance
 
-def plot_feature_importance(pipeline, X_val, y_val, target_name, output_dir):
+def plot_feature_importance(pipeline, X_val, y_val, target_name, model_name, output_dir):
     '''
     Gera um gráfico analítico mostrando o peso de cada variável no modelo.
     Mostra o quanto o erro aumenta ao embaralhar aleatoriamente cada coluna.
     '''
-    print("Gerando gráfico de importância por permutação")
+    print(f"Gerando gráfico de importância por permutação para {model_name}")
     result = permutation_importance(pipeline, X_val, y_val, n_repeats=3, random_state=42, n_jobs=1, scoring='neg_root_mean_squared_error')
     
     # Cria gráfico de barras horizontais ordenado pelas features mais importantes
     plt.figure(figsize=(12, 8))
     importances = pd.Series(result.importances_mean, index=X_val.columns)
     importances.nlargest(15).sort_values().plot(kind='barh', color='navy')
-    plt.title(f'Importância Relativa por Reembaralhamento - {target_name}')
-    plt.xlabel('Custo do Erro se a Feature for Falsificada (RMSE)')
+    plt.title(f'Importância Relativa ({model_name}) - {target_name}')
+    plt.xlabel('Custo do Erro (RMSE)')
     plt.ylabel('Features')
     plt.tight_layout()
     
     # Salva em formato PDF vetorizado para incluir no documento final
-    output_path = os.path.join(output_dir, f"feature_importance_{target_name}.pdf")
+    output_path = os.path.join(output_dir, f"{model_name.replace(' ', '')}_feature_importance_{target_name}.pdf")
     plt.savefig(output_path, format='pdf', bbox_inches='tight')
     plt.close()
 
-def plot_actual_vs_predicted(y_test, y_pred, target_name, output_dir):
+def plot_actual_vs_predicted(y_test, y_pred, target_name, model_name, output_dir):
     '''
     Plota um gráfico de dispersão comparando os valores reais medidos e os preditos pela IA.
     '''
-    print("Gerando gráfico de Previsão vs Valores Reais")
+    print(f"Gerando gráfico de Previsão vs Valores Reais para {model_name}")
     plt.figure(figsize=(10, 8))
     
     # Amostra pontos aleatórios para evitar que o gráfico PDF fique muito pesado
@@ -46,20 +46,20 @@ def plot_actual_vs_predicted(y_test, y_pred, target_name, output_dir):
     min_val, max_val = min(y_test.min(), y_pred.min()), max(y_test.max(), y_pred.max())
     
     plt.plot([min_val, max_val], [min_val, max_val], 'r--', lw=2)
-    plt.title(f'Propagação Verdadeira x Sinal Previsto - {target_name}')
+    plt.title(f'Propagação Verdadeira x Sinal Previsto ({model_name}) - {target_name}')
     plt.xlabel('Verdadeiro Sinal Medido Efetivo')
     plt.ylabel('Sinal Previsto')
     plt.tight_layout()
     
-    output_path = os.path.join(output_dir, f"actual_vs_predicted_{target_name}.pdf")
+    output_path = os.path.join(output_dir, f"{model_name.replace(' ', '')}_actual_vs_predicted_{target_name}.pdf")
     plt.savefig(output_path, format='pdf', bbox_inches='tight')
     plt.close()
 
-def plot_error_distribution(y_test, y_pred, target_name, output_dir):
+def plot_error_distribution(y_test, y_pred, target_name, model_name, output_dir):
     '''
     Exibe a distribuição estatística dos erros (Resíduos) em um histograma.
     '''
-    print("Gerando gráfico de distribuição de resíduos")
+    print(f"Gerando gráfico de distribuição de resíduos para {model_name}")
     errors = y_test - y_pred
 
     plt.figure(figsize=(10, 6))
@@ -67,12 +67,12 @@ def plot_error_distribution(y_test, y_pred, target_name, output_dir):
     # Plota o histograma com a curva KDE e marca o erro zero com linha tracejada
     sns.histplot(errors, bins=50, kde=True, color='purple')
     plt.axvline(x=0, color='black', linestyle='--', linewidth=2)
-    plt.title(f'Distribuição de Erro (Real vs Previsto) - {target_name}')
+    plt.title(f'Distribuição de Erro ({model_name}) - {target_name}')
     plt.xlabel('Erro Residual (dB)')
     plt.ylabel('Frequência')
     plt.tight_layout()
     
-    output_path = os.path.join(output_dir, f"error_distribution_{target_name}.pdf")
+    output_path = os.path.join(output_dir, f"{model_name.replace(' ', '')}_error_distribution_{target_name}.pdf")
     plt.savefig(output_path, format='pdf', bbox_inches='tight')
     plt.close()
 
@@ -116,8 +116,8 @@ def plot_coverage_map(df_coverage, df_route, df_antennas, model_name, target_nam
     plt.legend(loc='upper right')
     plt.grid(True, linestyle='--', alpha=0.3)
     
-    output_path = os.path.join(output_dir, f"coverage_map_{target_name}_{model_name}.pdf")
-    plt.savefig(output_path, format='pdf', bbox_inches='tight')
+    output_path = os.path.join(output_dir, f"{model_name.replace(' ', '')}_coverage_map_{target_name}.png")
+    plt.savefig(output_path, format='png', dpi=300, bbox_inches='tight')
     plt.close(fig)
 
 def plot_learning_curve(history, model_name, target_name, output_dir):
@@ -151,6 +151,6 @@ def plot_learning_curve(history, model_name, target_name, output_dir):
     plt.legend()
     plt.tight_layout()
     
-    output_path = os.path.join(output_dir, f"learning_curve_{target_name}_{model_name}.pdf")
+    output_path = os.path.join(output_dir, f"{model_name.replace(' ', '')}_learning_curve_{target_name}.pdf")
     plt.savefig(output_path, format='pdf', bbox_inches='tight')
     plt.close()

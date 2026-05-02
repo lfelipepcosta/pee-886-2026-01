@@ -1,0 +1,19 @@
+Relatório de Validação de Campo IA (xgb) (Grade 30m)
+--- INFORMAÇÕES DO BLIND TEST ---
+Antenas Ocultas (Blind Test): 36
+Pontos Totais de Blind Test: 12328
+---------------------------------
+Dados Totais (8155 pontos alinhados)
+RMSE : 12.43 dB
+MSE  : 154.49 dB
+Erro Médio (Viés ± Desvio Padrão): 6.27 ± 10.73 dB
+
+Dados Filtrados (Distância <= 40.0m, 8155 pontos)
+RMSE : 12.43 dB
+MSE  : 154.49 dB
+Erro Médio (Viés ± Desvio Padrão): 6.27 ± 10.73 dB
+
+Dados Calibrados (Compensação de 6.27 dB)
+RMSE Calibrado : 10.73 dB
+MSE Calibrado  : 115.13 dB
+Erro Médio Calib. (Viés ± Desvio Padrão): 0.00 ± 10.73 dB

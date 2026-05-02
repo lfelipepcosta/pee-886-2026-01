@@ -1,6 +1,11 @@
 Relatório de Métricas Finais (Amostra de Teste) - Híbrido Quântico
 ============================================================
-RMSE : 6.0588 dB
-MAE  : 4.6288 dB
-R2   : 0.8340
+Antenas Únicas no Dataset (Treino+Teste): 207
+Dataset Total (S/ Antenas Blind): 58940 amostras
+Amostras de Treino: 47152
+Amostras de Teste Interno: 11788
+------------------------------------------------------------
+RMSE : 6.1131 dB
+MAE  : 4.6795 dB
+R2   : 0.8363
 ============================================================
