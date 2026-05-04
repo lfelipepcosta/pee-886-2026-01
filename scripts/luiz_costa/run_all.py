@@ -11,22 +11,22 @@ os.makedirs(log_dir, exist_ok=True)
 # Lista de scripts para execução do Pipeline ABSOLUTAMENTE COMPLETO (Baselines + Híbrido)
 scripts = [
     # "run_optimization_dt.py",     # 1. Otimização de hiperparâmetros Decision Tree
-    "run_main_dt.py",             # 2. Treinamento final e métricas Decision Tree
+    # "run_main_dt.py",             # 2. Treinamento final e métricas Decision Tree
     "run_inference_dt.py",        # 3. Geração do mapa de cobertura Decision Tree
     
     # "run_optimization_xgb.py",    # 4. Otimização de hiperparâmetros XGBoost
-    "run_main_xgb.py",            # 5. Treinamento final e métricas XGBoost
+    # "run_main_xgb.py",            # 5. Treinamento final e métricas XGBoost
     "run_inference_xgb.py",       # 6. Geração do mapa de cobertura XGBoost
     
     # "run_optimization_mlp.py",    # 7. Otimização de hiperparâmetros MLP
-    "run_main_mlp.py",            # 8. Treinamento final e métricas MLP
+    # "run_main_mlp.py",            # 8. Treinamento final e métricas MLP
     "run_inference_mlp.py",       # 9. Geração do mapa de cobertura MLP
     
     # "run_optimization.py",        # 10. Otimização de hiperparâmetros Híbrido Quântico
-    "run_main.py",                # 11. Treinamento final e métricas Híbrido
+    # "run_main.py",                # 11. Treinamento final e métricas Híbrido
     "run_inference_hybrid.py",    # 12. Geração do mapa de cobertura Híbrido
     
-    "run_spatial_validation.py"   # 13. Validação espacial (Comparação de todos os modelos)
+    # "run_spatial_validation.py"   # 13. Validação espacial (Comparação de todos os modelos)
 ]
 
 # Configura o caminho completo do arquivo de log no diretório data

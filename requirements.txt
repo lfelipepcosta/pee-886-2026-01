@@ -24,3 +24,15 @@ quimb
 pylatexenc
 pennylane-qiskit
 kahypar
+scipy
+joblib
+gdown
+optuna
+SQLAlchemy
+xgboost
+optuna-integration[xgboost]
+geopandas
+shapely
+rasterio
+pyarrow
+pennylane-lightning

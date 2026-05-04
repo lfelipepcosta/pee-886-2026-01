@@ -111,6 +111,12 @@ def plot_coverage_map(df_coverage, df_route, df_antennas, model_name, target_nam
         antennas_gdf = gpd.GeoDataFrame(df_antennas, geometry=[Point(xy) for xy in zip(df_antennas['Antena_Lon'], df_antennas['Antena_Lat'])], crs="EPSG:4674")
         antennas_gdf.plot(ax=ax, color='black', marker='x', markersize=80, linewidths=1.5, label="Sites (Antenas)", zorder=10)
 
+    # Força os limites do mapa a casarem com a área predita
+    min_lon, max_lon = df_coverage['Longitude'].min(), df_coverage['Longitude'].max()
+    min_lat, max_lat = df_coverage['Latitude'].min(), df_coverage['Latitude'].max()
+    ax.set_xlim([min_lon, max_lon])
+    ax.set_ylim([min_lat, max_lat])
+
     # Configurações finais de título, legenda e grade
     plt.title(f"Mapa de Cobertura Espacial ({model_name}) - {target_name}", fontsize=16)
     plt.legend(loc='upper right')
