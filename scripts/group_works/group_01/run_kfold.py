@@ -71,15 +71,15 @@ def run_kfold_experiment(model_type, params, folds, device, output_dir):
     std_acc = np.std(accuracies)
     avg_time = np.mean(times)
     
-    report_path = os.path.join(output_dir, f"kfold_{model_type}_times.txt")
-    with open(report_path, "w") as f:
-        f.write(f"Resultados K-Fold {model_type}\n")
-        f.write(f"Acuracia Media: {avg_acc:.4f} +- {std_acc:.4f}\n")
-        f.write(f"Tempo Medio por Fold: {avg_time:.2f}s\n")
-        f.write(f"Tempos Individuais: {times}\n")
-        
     print(f"\nResultado Final {model_type}: {avg_acc:.4f} +- {std_acc:.4f}")
-    return avg_acc, std_acc
+    return {
+        'model': model_type,
+        'accuracies': accuracies,
+        'times': times,
+        'avg_acc': avg_acc,
+        'std_acc': std_acc,
+        'avg_time': avg_time
+    }
 
 def main():
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -104,9 +104,25 @@ def main():
     output_dir = os.path.join(repo_root, "data/group_works/group_01/kfold")
     os.makedirs(output_dir, exist_ok=True)
 
-    # Roda experimentos
-    run_kfold_experiment("classical", params_c, folds, device, output_dir)
-    run_kfold_experiment("hybrid", params_h, folds, device, output_dir)
+    # Roda experimentos e coleta resultados
+    results = []
+    results.append(run_kfold_experiment("classical", params_c, folds, device, output_dir))
+    results.append(run_kfold_experiment("hybrid", params_h, folds, device, output_dir))
+    
+    # Salva relatório único consolidado
+    report_path = os.path.join(output_dir, "kfold_report.txt")
+    with open(report_path, "w") as f:
+        f.write(f"RELATORIO CONSOLIDADO K-FOLD (5 Folds)\n")
+        f.write("="*40 + "\n")
+        for res in results:
+            f.write(f"\nMODELO: {res['model'].upper()}\n")
+            f.write(f"Acuracias: {res['accuracies']}\n")
+            f.write(f"Tempos por Fold: {[f'{t:.2f}s' for t in res['times']]}\n")
+            f.write(f"ACURACIA MEDIA: {res['avg_acc']:.4f} +- {res['std_acc']:.4f}\n")
+            f.write(f"TEMPO MEDIO: {res['avg_time']:.2f}s\n")
+            f.write("-" * 20 + "\n")
+            
+    print(f"\nRelatorio consolidado salvo em: {report_path}")
 
 if __name__ == "__main__":
     main()

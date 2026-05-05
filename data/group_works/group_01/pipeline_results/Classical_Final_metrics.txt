@@ -1,0 +1,3 @@
+Relatório Classical_Final
+Tempo: 241.80s
+Best Val Acc: 0.9069

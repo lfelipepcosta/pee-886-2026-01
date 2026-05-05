@@ -32,25 +32,46 @@ def optuna_objective(trial, model_type, train_loader, val_loader, device):
         model = HybridResNet18(num_classes=2, n_qubits=4, q_depth=q_depth)
         model_name = "Optuna_Hybrid"
         
-    # Salva temporariamente no diretório optuna
-    temp_dir = os.path.join(repo_root, f"data/group_works/group_01/optuna/{model_type}_trial_{trial.number}")
+    # Define diretório para o melhor modelo temporário da otimização
+    optuna_dir = os.path.join(repo_root, "data/group_works/group_01/optuna")
+    os.makedirs(optuna_dir, exist_ok=True)
     
     # Treino com verbose=False para não poluir o terminal
     history = train_model(
         model=model,
         train_loader=train_loader,
         val_loader=val_loader,
-        model_name=model_name,
+        model_name=f"Optuna_{model_type}_Best",
         epochs=5,
         lr=lr,
         weight_decay=weight_decay,
         device=device,
-        output_dir=temp_dir,
+        output_dir=optuna_dir,
         verbose=False
     )
     
     # Optuna maximiza a melhor acurácia de validação atingida durante as épocas
     best_acc = max(history['val_acc'])
+    
+    # Se este trial for o melhor até agora, o checkpoint já foi salvo pelo train_model 
+    # No entanto, o train_model salva o melhor DAQUELA RODADA. 
+    # Para garantir que temos o melhor global do Optuna, vamos gerenciar aqui
+    
+    study = trial.study
+    is_best = False
+    try:
+        if best_acc > study.best_value:
+            is_best = True
+    except ValueError:
+        is_best = True # Primeiro trial
+    
+    if is_best:
+        # Renomeia para um arquivo definitivo do melhor trial
+        final_best_path = os.path.join(optuna_dir, f"best_{model_type}_checkpoint.pth")
+        current_pth = os.path.join(optuna_dir, f"Optuna_{model_type}_Best_best.pth")
+        if os.path.exists(current_pth):
+            import shutil
+            shutil.copy(current_pth, final_best_path)
     
     # Print customizado para o usuário acompanhar o progresso sem spam
     study = trial.study

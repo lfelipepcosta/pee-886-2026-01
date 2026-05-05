@@ -62,8 +62,18 @@ def main():
     kfold_dir = os.path.join(base_dir, "kfold")
     os.makedirs(kfold_dir, exist_ok=True)
     folds = get_kfold_dataloaders(batch_size=16, n_splits=5)
-    run_kfold_experiment("classical", best_c, folds, device, kfold_dir)
-    run_kfold_experiment("hybrid", best_h, folds, device, kfold_dir)
+    
+    k_results = []
+    k_results.append(run_kfold_experiment("classical", best_c, folds, device, kfold_dir))
+    k_results.append(run_kfold_experiment("hybrid", best_h, folds, device, kfold_dir))
+    
+    # Salva relatório consolidado de K-Fold
+    with open(os.path.join(kfold_dir, "kfold_report.txt"), "w") as f:
+        f.write("RELATORIO CONSOLIDADO K-FOLD\n" + "="*30 + "\n")
+        for r in k_results:
+            f.write(f"\nMODELO: {r['model'].upper()}\n")
+            f.write(f"ACURACIA MEDIA: {r['avg_acc']:.4f} +- {r['std_acc']:.4f}\n")
+            f.write(f"TEMPO MEDIO: {r['avg_time']:.2f}s\n")
 
     # Treinamento final e teste cego
     print("\nTreinamento final e teste cego")

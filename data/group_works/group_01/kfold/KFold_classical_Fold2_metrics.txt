@@ -1,0 +1,3 @@
+Relatório KFold_classical_Fold2
+Tempo: 73.13s
+Best Val Acc: 0.8970

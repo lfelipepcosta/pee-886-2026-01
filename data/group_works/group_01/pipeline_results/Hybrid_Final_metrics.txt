@@ -1,0 +1,3 @@
+Relatório Hybrid_Final
+Tempo: 775.24s
+Best Val Acc: 0.8866
