@@ -1,0 +1,3 @@
+Relatório Optuna_Classical
+Tempo: 67.97s
+Best Val Acc: 0.7935

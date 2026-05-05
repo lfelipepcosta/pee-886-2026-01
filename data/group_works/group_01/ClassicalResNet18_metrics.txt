@@ -1,0 +1,14 @@
+Relatório de Execução - ClassicalResNet18
+========================================
+Tempo Total: 80.54 segundos
+Última Perda de Treino:     0.5067
+Última Acurácia de Treino:  0.8020
+Última Perda de Validação:    0.4350
+Última Acurácia de Validação: 0.8364
+
+Evolução por Época:
+Época 1 | Val Acc: 0.7636 | Val Loss: 0.6069
+Época 2 | Val Acc: 0.8030 | Val Loss: 0.5410
+Época 3 | Val Acc: 0.8182 | Val Loss: 0.4886
+Época 4 | Val Acc: 0.7606 | Val Loss: 0.4697
+Época 5 | Val Acc: 0.8364 | Val Loss: 0.4350

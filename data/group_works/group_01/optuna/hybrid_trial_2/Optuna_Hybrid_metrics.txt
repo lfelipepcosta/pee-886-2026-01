@@ -1,0 +1,3 @@
+Relatório Optuna_Hybrid
+Tempo: 198.15s
+Best Val Acc: 0.5101

@@ -36,3 +36,4 @@ shapely
 rasterio
 pyarrow
 pennylane-lightning
+torchvision
