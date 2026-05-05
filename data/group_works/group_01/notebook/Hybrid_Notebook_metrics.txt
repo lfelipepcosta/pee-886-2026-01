@@ -1,0 +1,3 @@
+Relatório Hybrid_Notebook
+Tempo: 208.40s
+Best Val Acc: 0.8502
