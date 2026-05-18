@@ -1,0 +1,3 @@
+Relatório Hybrid_backprop
+Tempo: 100.66s
+Best Val Acc: 0.8381

@@ -1,0 +1,5 @@
+Relatório de Generalização Espacial (GroupKFold por Antena)
+============================================================
+RMSE Médio: 9.45 dB (Desvio padrão: 0.3344)
+MAE Médio:  7.27 dB (Desvio padrão: 0.2287)
+R2 Médio:   0.5944 (Desvio padrão: 0.0479)

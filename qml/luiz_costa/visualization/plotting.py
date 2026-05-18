@@ -19,9 +19,10 @@ def plot_feature_importance(pipeline, X_val, y_val, target_name, model_name, out
     plt.figure(figsize=(12, 8))
     importances = pd.Series(result.importances_mean, index=X_val.columns)
     importances.nlargest(15).sort_values().plot(kind='barh', color='navy')
-    plt.title(f'Importância Relativa ({model_name}) - {target_name}')
-    plt.xlabel('Custo do Erro (RMSE)')
-    plt.ylabel('Features')
+    plt.title(f'Importância Relativa ({model_name}) - {target_name}', fontsize=28)
+    plt.xlabel('Custo do Erro (RMSE)', fontsize=24)
+    plt.ylabel('Features', fontsize=24)
+    plt.yticks(fontsize=18)
     plt.tight_layout()
     
     # Salva em formato PDF vetorizado para incluir no documento final
@@ -46,9 +47,9 @@ def plot_actual_vs_predicted(y_test, y_pred, target_name, model_name, output_dir
     min_val, max_val = min(y_test.min(), y_pred.min()), max(y_test.max(), y_pred.max())
     
     plt.plot([min_val, max_val], [min_val, max_val], 'r--', lw=2)
-    plt.title(f'Propagação Verdadeira x Sinal Previsto ({model_name}) - {target_name}')
-    plt.xlabel('Verdadeiro Sinal Medido Efetivo')
-    plt.ylabel('Sinal Previsto')
+    plt.title(f'Propagação Verdadeira x Sinal Previsto ({model_name}) - {target_name}', fontsize=28)
+    plt.xlabel('Verdadeiro Sinal Medido Efetivo', fontsize=24)
+    plt.ylabel('Sinal Previsto', fontsize=24)
     plt.tight_layout()
     
     output_path = os.path.join(output_dir, f"{model_name.replace(' ', '')}_actual_vs_predicted_{target_name}.pdf")
@@ -67,9 +68,9 @@ def plot_error_distribution(y_test, y_pred, target_name, model_name, output_dir)
     # Plota o histograma com a curva KDE e marca o erro zero com linha tracejada
     sns.histplot(errors, bins=50, kde=True, color='purple')
     plt.axvline(x=0, color='black', linestyle='--', linewidth=2)
-    plt.title(f'Distribuição de Erro ({model_name}) - {target_name}')
-    plt.xlabel('Erro Residual (dB)')
-    plt.ylabel('Frequência')
+    plt.title(f'Distribuição de Erro ({model_name}) - {target_name}', fontsize=28)
+    plt.xlabel('Erro Residual (dB)', fontsize=24)
+    plt.ylabel('Frequência', fontsize=24)
     plt.tight_layout()
     
     output_path = os.path.join(output_dir, f"{model_name.replace(' ', '')}_error_distribution_{target_name}.pdf")
@@ -98,7 +99,7 @@ def plot_coverage_map(df_coverage, df_route, df_antennas, model_name, target_nam
 
     coverage_gdf.plot(
         column='RSRP_dBm', ax=ax, cmap='RdYlGn', vmin=vmin_data, vmax=vmax_data, 
-        legend=True, markersize=2, alpha=0.8, legend_kwds={'label': 'Predição RSRP (dBm)'}
+        legend=True, markersize=2, alpha=0.8, legend_kwds={'label': 'Predição RSRP (dBm)', 'shrink': 0.6}
     )
     
     # Desenha os pontos reais percorridos durante a coleta no Drive Test
@@ -118,8 +119,17 @@ def plot_coverage_map(df_coverage, df_route, df_antennas, model_name, target_nam
     ax.set_ylim([min_lat, max_lat])
 
     # Configurações finais de título, legenda e grade
-    plt.title(f"Mapa de Cobertura Espacial ({model_name}) - {target_name}", fontsize=16)
-    plt.legend(loc='upper right')
+    plt.title(f"Mapa de Cobertura Espacial ({model_name}) - {target_name}", fontsize=28)
+    
+    # Ajusta o tamanho da fonte do label da colorbar
+    for a in fig.axes:
+        if a != ax:
+            a.set_ylabel('Predição RSRP (dBm)', fontsize=24)
+            a.tick_params(labelsize=18)
+
+    leg = plt.legend(loc='lower left', fontsize=24, markerscale=1.5)
+    for handle in leg.legend_handles:
+        handle.set_alpha(1.0) # Garante que os ícones da legenda fiquem visíveis
     plt.grid(True, linestyle='--', alpha=0.3)
     
     output_path = os.path.join(output_dir, f"{model_name.replace(' ', '')}_coverage_map_{target_name}.png")
@@ -150,11 +160,11 @@ def plot_learning_curve(history, model_name, target_name, output_dir):
     plt.plot(x_axis, train_loss, 'b-', label='Treino', linewidth=2)
     plt.plot(x_axis, val_loss, 'r-', label='Validação', linewidth=2)
     
-    plt.title(f'Curva de Aprendizado - {model_name} ({target_name})', fontsize=14)
-    plt.xlabel(x_label, fontsize=12)
-    plt.ylabel('Erro (RMSE em dB)', fontsize=12)
+    plt.title(f'Curva de Aprendizado - {model_name} ({target_name})', fontsize=28)
+    plt.xlabel(x_label, fontsize=24)
+    plt.ylabel('Erro (RMSE em dB)', fontsize=24)
     plt.grid(True, linestyle='--', alpha=0.5)
-    plt.legend()
+    plt.legend(fontsize=24)
     plt.tight_layout()
     
     output_path = os.path.join(output_dir, f"{model_name.replace(' ', '')}_learning_curve_{target_name}.pdf")

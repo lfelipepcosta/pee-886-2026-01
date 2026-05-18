@@ -1,0 +1,7 @@
+{
+    "quantum_layers": 2,
+    "n_qubits": 6,
+    "hidden_size": 256,
+    "learning_rate": 0.00495712349272108,
+    "batch_size": 128
+}

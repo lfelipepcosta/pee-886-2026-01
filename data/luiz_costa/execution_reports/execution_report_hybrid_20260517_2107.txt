@@ -1,0 +1,14 @@
+Relatório de Execução - Pipelines Híbridos (4 e 6 qubits)
+Início: Sun May 17 21:07:54 2026
+============================================================
+run_optimization_4.py: SUCESSO (495.85s)
+run_main_4.py: SUCESSO (1797.36s)
+run_inference_hybrid_4.py: SUCESSO (134.21s)
+run_spatial_validation_4.py: SUCESSO (25.74s)
+run_optimization_6.py: SUCESSO (1202.63s)
+run_main_6.py: SUCESSO (5493.66s)
+run_inference_hybrid_6.py: SUCESSO (149.14s)
+run_spatial_validation_6.py: SUCESSO (27.07s)
+============================================================
+Fim: Sun May 17 23:43:20 2026
+Tempo Total: 155.43 min

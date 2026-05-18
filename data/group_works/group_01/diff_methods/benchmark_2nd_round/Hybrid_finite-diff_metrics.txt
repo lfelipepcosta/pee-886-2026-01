@@ -1,0 +1,3 @@
+Relatório Hybrid_finite-diff
+Tempo: 2317.31s
+Best Val Acc: 0.7368

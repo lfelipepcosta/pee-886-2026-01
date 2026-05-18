@@ -1,0 +1,3 @@
+Relatório Hybrid_adjoint
+Tempo: 662.16s
+Best Val Acc: 0.8502

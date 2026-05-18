@@ -1,0 +1,26 @@
+RELATORIO DE BENCHMARK - METODOS DE DIFERENCIACAO (TESTE CEGO)
+============================================================
+
+METODO: PARAMETER-SHIFT
+ACURACIA TESTE (BLIND): 0.8911
+TEMPO DE TREINO+TESTE (5 epocas): 4204.78s
+PICO DE MEMORIA RAM: 4.78 MB
+----------------------------------------
+
+METODO: ADJOINT
+ACURACIA TESTE (BLIND): 0.8710
+TEMPO DE TREINO+TESTE (5 epocas): 676.74s
+PICO DE MEMORIA RAM: 2.53 MB
+----------------------------------------
+
+METODO: BACKPROP
+ACURACIA TESTE (BLIND): 0.8710
+TEMPO DE TREINO+TESTE (5 epocas): 101.87s
+PICO DE MEMORIA RAM: 0.95 MB
+----------------------------------------
+
+METODO: FINITE-DIFF
+ACURACIA TESTE (BLIND): 0.7621
+TEMPO DE TREINO+TESTE (5 epocas): 2324.27s
+PICO DE MEMORIA RAM: 3.41 MB
+----------------------------------------

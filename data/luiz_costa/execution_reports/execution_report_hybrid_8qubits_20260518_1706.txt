@@ -1,0 +1,10 @@
+Relatório de Execução - Pipeline Híbrido (8 qubits)
+Início: Mon May 18 17:06:56 2026
+============================================================
+run_optimization_8.py: SUCESSO (2094.46s)
+run_main_8.py: SUCESSO (9116.52s)
+run_inference_hybrid_8.py: SUCESSO (155.56s)
+run_spatial_validation_8.py: SUCESSO (25.09s)
+============================================================
+Fim: Mon May 18 20:16:48 2026
+Tempo Total: 189.86 min

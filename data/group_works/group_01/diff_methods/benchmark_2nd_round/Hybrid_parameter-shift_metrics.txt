@@ -1,0 +1,3 @@
+Relatório Hybrid_parameter-shift
+Tempo: 4197.56s
+Best Val Acc: 0.8785

@@ -8,37 +8,25 @@ repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
 log_dir = os.path.join(repo_root, "data", "luiz_costa", "execution_reports")
 os.makedirs(log_dir, exist_ok=True)
 
-# Lista de scripts para execução do Pipeline ABSOLUTAMENTE COMPLETO (Baselines + Híbrido)
+# Lista de scripts para execução do Pipeline Híbrido Quântico Completo para 8 Qubits
 scripts = [
-    # "run_optimization_dt.py",     # 1. Otimização de hiperparâmetros Decision Tree
-    # "run_main_dt.py",             # 2. Treinamento final e métricas Decision Tree
-    "run_inference_dt.py",        # 3. Geração do mapa de cobertura Decision Tree
-    
-    # "run_optimization_xgb.py",    # 4. Otimização de hiperparâmetros XGBoost
-    # "run_main_xgb.py",            # 5. Treinamento final e métricas XGBoost
-    "run_inference_xgb.py",       # 6. Geração do mapa de cobertura XGBoost
-    
-    # "run_optimization_mlp.py",    # 7. Otimização de hiperparâmetros MLP
-    # "run_main_mlp.py",            # 8. Treinamento final e métricas MLP
-    "run_inference_mlp.py",       # 9. Geração do mapa de cobertura MLP
-    
-    # "run_optimization.py",        # 10. Otimização de hiperparâmetros Híbrido Quântico
-    # "run_main.py",                # 11. Treinamento final e métricas Híbrido
-    "run_inference_hybrid.py",    # 12. Geração do mapa de cobertura Híbrido
-    
-    # "run_spatial_validation.py"   # 13. Validação espacial (Comparação de todos os modelos)
+    # --- MODELO HÍBRIDO QUANTICO 8 QUBITS ---
+    "run_optimization_8.py",       # 1. Otimização de hiperparâmetros Híbrido 8 Qubits
+    "run_main_8.py",               # 2. Treinamento final e métricas Híbrido 8 Qubits
+    "run_inference_hybrid_8.py",   # 3. Geração do mapa de cobertura Híbrido 8 Qubits
+    "run_spatial_validation_8.py", # 4. Validação espacial Híbrido 8 Qubits
 ]
 
 # Configura o caminho completo do arquivo de log no diretório data
 timestamp = time.strftime("%Y%m%d_%H%M")
-log_file = os.path.join(log_dir, f"execution_report_hybrid_{timestamp}.txt")
+log_file = os.path.join(log_dir, f"execution_report_hybrid_8qubits_{timestamp}.txt")
 
-print(f"Iniciando Orquestrador de Execução (Pipeline Híbrido Quântico)")
+print(f"Iniciando Orquestrador de Execução (Pipeline Híbrido de 8 qubits)")
 print(f"O relatório detalhado será salvo em: {log_file}\n")
 
 with open(log_file, "w", encoding="utf-8") as f_log:
     total_start = time.time()
-    f_log.write(f"Relatório de Execução - Pipeline Híbrido Quântico\n")
+    f_log.write(f"Relatório de Execução - Pipeline Híbrido (8 qubits)\n")
     f_log.write(f"Início: {time.ctime(total_start)}\n")
     f_log.write(f"{'='*60}\n")
     
@@ -102,7 +90,7 @@ with open(log_file, "w", encoding="utf-8") as f_log:
     
     completion_msg = (
         f"\n{'='*60}\n"
-        f"PIPELINE DE BASELINES CONCLUÍDO!\n"
+        f"PIPELINE DE 8 QUBITS CONCLUÍDO!\n"
         f"Tempo total de execução: {total_time_min:.2f} minutos.\n"
         f"Relatório salvo em: {log_file}\n"
         f"{'='*60}\n"

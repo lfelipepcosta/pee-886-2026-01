@@ -1,0 +1,5 @@
+Relatório de Execução - Pipelines Híbridos (4 e 6 qubits)
+Início: Sun May 17 18:03:50 2026
+============================================================
+run_optimization_4.py: ERRO (Código 1) (40.48s)
+run_main_4.py: INTERROMPIDO

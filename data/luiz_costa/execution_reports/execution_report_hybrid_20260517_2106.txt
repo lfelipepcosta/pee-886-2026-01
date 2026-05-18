@@ -1,0 +1,7 @@
+Relatório de Execução - Pipelines Híbridos (4 e 6 qubits)
+Início: Sun May 17 21:06:57 2026
+============================================================
+run_optimization_4.py: ERRO (Código 1) (2.00s)
+run_main_4.py: ERRO (Código 1) (0.65s)
+run_inference_hybrid_4.py: ERRO (Código 1) (0.34s)
+run_spatial_validation_4.py: INTERROMPIDO

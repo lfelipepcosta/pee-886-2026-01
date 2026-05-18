@@ -1,0 +1,3 @@
+RMSE Médio: 5.93 dB (Desvio padrão: 0.0707)
+MAE Médio:  4.54 dB (Desvio padrão: 0.0559)
+R2 Médio:   0.8432 (Desvio padrão: 0.0022)
